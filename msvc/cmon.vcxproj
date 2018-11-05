@@ -137,6 +137,7 @@
     <ClInclude Include="..\src\battlefont.hpp" />
     <ClInclude Include="..\src\engine.hpp" />
     <ClInclude Include="..\src\gamestate.hpp" />
+    <ClInclude Include="..\src\ui.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
