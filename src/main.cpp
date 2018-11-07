@@ -1,48 +1,119 @@
 #include <SFML/Graphics.hpp>
+#include <tinyxml2.h>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <functional>
 
 const std::string Resources					= "resources/";
 const std::string TextureBattleUiPlayerBox	= "sprites/battleui/playerBox.png";
 const std::string TextureBattleUiEnemyBox	= "sprites/battleui/enemyBox.png";
 const std::string TextureBackground			= "sprites/battlebacks/battlebgField.png";
 //const std::string FontTitle					= "fonts/pkmnemn.ttf";
-const std::string FontTitle					= "fonts/pkmndp.ttf";
+const std::string FontTitle					= "fonts/pkmndp.png";
 
-struct ShadowedText : public sf::Drawable
+sf::IntRect getIntRectFromChar(char c)
 {
-	void setFont(sf::Font & font)
+	constexpr static int32_t BangPadding = 2;
+	constexpr static int32_t LowerSymPadding = 6;
+
+	sf::IntRect rect;
+
+	rect.height = 20;
+	rect.width = 6;
+	rect.left = 2;
+
+	if(c == '!')
 	{
-		front.setFont(font);
-		back.setFont(font);
+		rect.width = BangPadding;
+		return rect;
+	}
+	else rect.left += BangPadding;
+
+	if(c >= '"' && c <= '+')
+	{
+		rect.left += BangPadding;
+		rect.left += LowerSymPadding * (c - '"');
 	}
 
-	void setOffset(sf::Vector2i off)
+	if(c >= 'A')
 	{
-		offset = off;
+		rect.left += 10 * c;
 	}
 
-	void setString(const std::string & str)
+	return rect;
+}
+
+struct BitmapText;
+
+struct BitmapFont 
+{
+	BitmapFont(const char const * str, int32_t padding, std::function<sf::IntRect(char)> fun)
+		: m_padding(padding), m_fun(fun)
 	{
-		front.setString(str);
-		back.setString(str);
+		m_texture.loadFromFile(str);
 	}
 
-	void setPosition(sf::Vector2i pos)
-	{
-		front.setPosition(static_cast<sf::Vector2f>(pos));
-		back.setPosition(static_cast<sf::Vector2f>(pos + offset));
-	}
-
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
-	{
-		target.draw(back);
-		target.draw(front);
-	}
-
-	sf::Text front, back;
 private:
-	sf::Vector2i offset;
+	friend class BitmapText;
+
+	std::function<sf::IntRect(char)> m_fun;
+	sf::Texture m_texture;
+	int32_t m_padding;
+};
+
+struct Letter
+{
+	char c;
+	sf::Vector2f position;
+	sf::IntRect dimension;
+};
+
+struct BitmapText
+{
+	BitmapText(BitmapFont & bmf)
+		: m_bmf(bmf)
+	{
+		m_sprite.setTexture(m_bmf.m_texture);
+	}
+
+	void setPosition(sf::Vector2f pos)
+	{
+		m_position = pos;
+	}
+
+	void setString(const std::string && str)
+	{
+		m_str = str;
+		m_letters.clear();
+
+		for(auto c : m_str)
+		{
+			Letter let;
+			let.c = c;
+			let.dimension = m_bmf.m_fun(c);
+			let.position = m_letters.empty() ? sf::Vector2f() : m_letters.back().position 
+				+ sf::Vector2f(m_letters.back().dimension.width + m_bmf.m_padding, 0.f);
+
+			m_letters.push_back(let);
+		}
+	}
+
+	void draw(sf::RenderWindow & target)
+	{
+		for(auto & let : m_letters)
+		{
+			m_sprite.setPosition(m_position + let.position);
+			m_sprite.setTextureRect(let.dimension);
+			target.draw(m_sprite);
+		}
+	}
+private:
+	sf::Vector2f m_position;
+	std::vector<Letter> m_letters;
+	std::string m_str;
+	BitmapFont & m_bmf;
+	sf::Sprite m_sprite;
 };
 
 void initPkmnNameText(sf::Text & text)
@@ -53,20 +124,9 @@ void initPkmnNameText(sf::Text & text)
 	text.setOutlineThickness(2u);
 }
 
-void initPkmnNameText(ShadowedText & text)
-{
-	text.back.setCharacterSize(20u);
-	text.front.setCharacterSize(20u);
-	text.back.setFillColor(sf::Color::Black);
-	text.front.setFillColor(sf::Color::White);
-	text.setOffset({1, 1});
-}
-
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "", sf::Style::None);
 	
-	window.setFramerateLimit(60);
 	
 	sf::Texture texturePlayerBox, textureEnemyBox, textureBackground;
 	sf::Font titleFont;
@@ -81,7 +141,28 @@ int main()
 	p2Frame.setTexture(textureEnemyBox, true);
 	background.setTexture(textureBackground);
 
+	/* This stuff broken 
+	tinyxml2::XMLDocument doc;
+	std::cout << "Font xml loaded: " << (doc.LoadFile("resources/fonts/pkmndp.xml") == tinyxml2::XML_SUCCESS) << '\n';
+
+	auto chd = doc.FirstChild()->NextSibling()->LastChild();
+
+	if(!chd) return 0;
+
+	std::cout << chd->Value() << '\n';
+
+	std::cin.get();
+
+	auto ele = chd->FirstChildElement("char");
+
+	if(!ele) return 0;
+
+	std::cout << ele->GetText() << '\n';
 	
+	std::cin.get();
+
+	*/
+
 	p1Name.setFont(titleFont);
 	p2Name.setFont(titleFont);
 	initPkmnNameText(p1Name);
@@ -91,10 +172,23 @@ int main()
 	p2Name.setString("AMPHAROS");
 	p2Name.setPosition({532, 498});
 	
+	BitmapFont bmf((Resources + FontTitle).c_str(), 0, getIntRectFromChar);
+	BitmapText text(bmf);
+
+	text.setString("!!!\"\"\"###");
+	text.setPosition(sf::Vector2f(0, 300));
+	
+
+	sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "", sf::Style::None);
+
+	window.setFramerateLimit(60);
 
 	p1Frame.setPosition(500, 500);
 
 	sf::View fontView = window.getView();
+	fontView.setSize(static_cast<sf::Vector2f>(textureBackground.getSize()));
+	sf::Vector2f center = static_cast<sf::Vector2f>(textureBackground.getSize() / 2u);
+	fontView.setCenter(center);
 
 	while(window.isOpen())
 	{
@@ -102,7 +196,7 @@ int main()
 		while(window.pollEvent(event))
 		{
 			if(event.type == sf::Event::Closed) window.close();
-			if(event.type == sf::Event::KeyPressed
+			else if(event.type == sf::Event::KeyPressed
 				&& event.key.code == sf::Keyboard::Key::F8)
 				window.close();
 
@@ -123,8 +217,9 @@ int main()
 		window.draw(p1Frame);
 		window.draw(p2Frame);
 
-		window.draw(p1Name);
-		window.draw(p2Name);
+		text.draw(window);
+		//window.draw(p1Name);
+		//window.draw(p2Name);
 		window.display();
 	}
 	return 0;
