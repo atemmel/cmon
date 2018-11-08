@@ -150,8 +150,7 @@ struct BitmapText
 			auto & theChar = m_bmfd.m_chars[index];
 
 			let.dimension = sf::IntRect(theChar.position, theChar.dimension);
-			let.position = sf::Vector2f((float)(prevAdvance) + prevX, 0.f)
-				+ static_cast<sf::Vector2f>(theChar.offset);
+			let.position = sf::Vector2f((float)(prevAdvance)+prevX + theChar.offset.x, -theChar.offset.y);
 			
 			m_letters.push_back(let);
 			prevAdvance = theChar.advance;
@@ -220,7 +219,7 @@ int main()
 	BitmapFontData bmfd(Resources + FontTitle, Resources + "fonts/pkmndp.xml");
 	BitmapText text(bmfd);
 
-	text.setString("You wanna go, punk?");
+	text.setString("AMPHAROS");
 	text.setPosition(sf::Vector2f(10, 300));
 	
 
