@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <functional>
+#include <algorithm>
 
 const std::string Resources					= "resources/";
 const std::string TextureBattleUiPlayerBox	= "sprites/battleui/playerBox.png";
@@ -12,69 +12,114 @@ const std::string TextureBackground			= "sprites/battlebacks/battlebgField.png";
 //const std::string FontTitle					= "fonts/pkmnemn.ttf";
 const std::string FontTitle					= "fonts/pkmndp.png";
 
-sf::IntRect getIntRectFromChar(char c)
+constexpr bool queryOk(tinyxml2::XMLError code)
 {
-	constexpr static int32_t BangPadding = 2;
-	constexpr static int32_t LowerSymPadding = 6;
-
-	sf::IntRect rect;
-
-	rect.height = 20;
-	rect.width = 6;
-	rect.left = 2;
-
-	if(c == '!')
-	{
-		rect.width = BangPadding;
-		return rect;
-	}
-	else rect.left += BangPadding;
-
-	if(c >= '"' && c <= '+')
-	{
-		rect.left += BangPadding;
-		rect.left += LowerSymPadding * (c - '"');
-	}
-
-	if(c >= 'A')
-	{
-		rect.left += 10 * c;
-	}
-
-	return rect;
+	return code == tinyxml2::XML_SUCCESS;
 }
 
-struct BitmapText;
+//Todo: Abstract this mess into separate files
 
-struct BitmapFont 
+struct BitmapFontData
 {
-	BitmapFont(const char const * str, int32_t padding, std::function<sf::IntRect(char)> fun)
-		: m_padding(padding), m_fun(fun)
+	struct CharData;
+
+	BitmapFontData(const std::string & imageStr, const std::string & metaStr)
 	{
-		m_texture.loadFromFile(str);
+		m_texture.loadFromFile(imageStr);
+		m_chars = loadCharDataFromFile(metaStr);
+		
+		//TODO: Sort vector for easy access
 	}
 
-private:
-	friend class BitmapText;
-
-	std::function<sf::IntRect(char)> m_fun;
+	std::vector<CharData> m_chars;
 	sf::Texture m_texture;
-	int32_t m_padding;
-};
 
-struct Letter
-{
-	char c;
-	sf::Vector2f position;
-	sf::IntRect dimension;
+private:
+	struct CharData
+	{
+		sf::Vector2i offset,
+			dimension,
+			position;
+
+		int advance = 0;
+		char c = 0;
+	};
+
+	bool parseChar(tinyxml2::XMLElement* element, CharData & data)
+	{
+		auto pOffsetX = element->FindAttribute("offset_x"),
+			pOffsetY = element->FindAttribute("offset_y"),
+			pAdvance = element->FindAttribute("advance"),	//Space between this letter and the next 
+			pRectW = element->FindAttribute("rect_w"),	//Width of area to draw
+			pRectX = element->FindAttribute("rect_x"),	//x of area to draw
+			pRectY = element->FindAttribute("rect_y"),	//y of area to draw
+			pRectH = element->FindAttribute("rect_h"),	//Height of area to draw
+			pChar = element->FindAttribute("id");	//character
+
+		if(!(pOffsetX && pOffsetY && pAdvance && pRectW && pRectX && pRectY
+			&& pRectH && pChar))
+		{
+			std::cerr << "Could not find attribute\n";
+			return 0;
+		}
+
+		bool ok = queryOk(pOffsetX->QueryIntValue(&data.offset.x))
+			&& queryOk(pOffsetY->QueryIntValue(&data.offset.y))
+			&& queryOk(pAdvance->QueryIntValue(&data.advance))
+			&& queryOk(pRectW->QueryIntValue(&data.dimension.x))
+			&& queryOk(pRectX->QueryIntValue(&data.position.x))
+			&& queryOk(pRectY->QueryIntValue(&data.position.y))
+			&& queryOk(pRectH->QueryIntValue(&data.dimension.y))
+			&& pChar->Value();
+
+		if(!ok)
+		{
+			std::cerr << "Attribute has incorrect value\n";
+			return 0;
+		}
+
+		data.c = *(pChar->Value());
+
+		return 1;
+	}
+
+	std::vector<CharData> loadCharDataFromFile(const std::string & str)
+	{
+		std::vector<CharData> characters;
+
+		tinyxml2::XMLDocument doc;
+		auto err = doc.LoadFile(str.c_str());
+
+		if(err != tinyxml2::XML_SUCCESS)
+		{
+			std::cerr << "XML ERROR: Could not open file: " << str << '\n';
+			return characters;
+		}
+
+		tinyxml2::XMLElement* root = doc.FirstChildElement("font");
+		if(!root) return characters;
+
+		tinyxml2::XMLElement* child = root->FirstChildElement("chars")->FirstChildElement("char");
+		CharData data;
+
+		while(child)
+		{
+			if(!parseChar(child, data)) return characters;
+
+			characters.push_back(data);
+			child = child->NextSiblingElement();
+		}
+
+		return characters;
+	}
 };
 
 struct BitmapText
 {
-	BitmapText(BitmapFont & bmf)
-		: m_bmf(bmf)
+	BitmapText(BitmapFontData & bmf)
+		: m_bmfd(bmf)
 	{
-		m_sprite.setTexture(m_bmf.m_texture);
+		m_sprite.setTexture(m_bmfd.m_texture);
 	}
 
 	void setPosition(sf::Vector2f pos)
@@ -87,15 +132,30 @@ struct BitmapText
 		m_str = str;
 		m_letters.clear();
 
+		float prevX = 0.f;
+		int prevAdvance = 0;
+
 		for(auto c : m_str)
 		{
 			Letter let;
-			let.c = c;
-			let.dimension = m_bmf.m_fun(c);
-			let.position = m_letters.empty() ? sf::Vector2f() : m_letters.back().position 
-				+ sf::Vector2f(m_letters.back().dimension.width + m_bmf.m_padding, 0.f);
 
+			size_t index = 0, size = m_bmfd.m_chars.size();
+			for(; index < size; index++)	//TODO: std find?
+			{
+				if(c == m_bmfd.m_chars[index].c) break;
+			}
+
+			if(index >= size) continue; //Bad character
+
+			auto & theChar = m_bmfd.m_chars[index];
+
+			let.dimension = sf::IntRect(theChar.position, theChar.dimension);
+			let.position = sf::Vector2f((float)(prevAdvance) + prevX, 0.f)
+				+ static_cast<sf::Vector2f>(theChar.offset);
+			
 			m_letters.push_back(let);
+			prevAdvance = theChar.advance;
+			prevX = let.position.x;
 		}
 	}
 
@@ -109,10 +169,17 @@ struct BitmapText
 		}
 	}
 private:
+	struct Letter
+	{
+		char c;
+		sf::Vector2f position;
+		sf::IntRect dimension;
+	};
+
 	sf::Vector2f m_position;
 	std::vector<Letter> m_letters;
 	std::string m_str;
-	BitmapFont & m_bmf;
+	BitmapFontData & m_bmfd;
 	sf::Sprite m_sprite;
 };
 
@@ -141,28 +208,6 @@ int main()
 	p2Frame.setTexture(textureEnemyBox, true);
 	background.setTexture(textureBackground);
 
-	/* This stuff broken 
-	tinyxml2::XMLDocument doc;
-	std::cout << "Font xml loaded: " << (doc.LoadFile("resources/fonts/pkmndp.xml") == tinyxml2::XML_SUCCESS) << '\n';
-
-	auto chd = doc.FirstChild()->NextSibling()->LastChild();
-
-	if(!chd) return 0;
-
-	std::cout << chd->Value() << '\n';
-
-	std::cin.get();
-
-	auto ele = chd->FirstChildElement("char");
-
-	if(!ele) return 0;
-
-	std::cout << ele->GetText() << '\n';
-	
-	std::cin.get();
-
-	*/
-
 	p1Name.setFont(titleFont);
 	p2Name.setFont(titleFont);
 	initPkmnNameText(p1Name);
@@ -172,11 +217,11 @@ int main()
 	p2Name.setString("AMPHAROS");
 	p2Name.setPosition({532, 498});
 	
-	BitmapFont bmf((Resources + FontTitle).c_str(), 0, getIntRectFromChar);
-	BitmapText text(bmf);
+	BitmapFontData bmfd(Resources + FontTitle, Resources + "fonts/pkmndp.xml");
+	BitmapText text(bmfd);
 
-	text.setString("!!!\"\"\"###");
-	text.setPosition(sf::Vector2f(0, 300));
+	text.setString("You wanna go, punk?");
+	text.setPosition(sf::Vector2f(10, 300));
 	
 
 	sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "", sf::Style::None);
