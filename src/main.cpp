@@ -114,17 +114,33 @@ private:
 	}
 };
 
-struct BitmapText
+struct BitmapText : public sf::Drawable
 {
 	BitmapText(BitmapFontData & bmf)
 		: m_bmfd(bmf)
 	{
-		m_sprite.setTexture(m_bmfd.m_texture);
 	}
 
 	void setPosition(sf::Vector2f pos)
 	{
+		for(auto & let : m_letters)
+		{
+			let.setPosition(let.getPosition() - m_position);
+		}
 		m_position = pos;
+		for(auto & let : m_letters)
+		{
+			let.setPosition(let.getPosition() + m_position);
+		}
+	}
+
+	void setScale(float scale)
+	{
+		for(auto & let : m_letters)
+		{
+			let.setScale(scale,scale);
+		}
+		m_scale = scale;
 	}
 
 	void setString(const std::string && str)
@@ -133,11 +149,13 @@ struct BitmapText
 		m_letters.clear();
 
 		float prevX = 0.f;
-		int prevAdvance = 0;
+		float prevAdvance = 0.f;
 
 		for(auto c : m_str)
 		{
-			Letter let;
+			sf::Sprite letter;
+			letter.setTexture(m_bmfd.m_texture);
+			letter.setScale(m_scale, m_scale);
 
 			size_t index = 0, size = m_bmfd.m_chars.size();
 			for(; index < size; index++)	//TODO: std find?
@@ -149,37 +167,33 @@ struct BitmapText
 
 			auto & theChar = m_bmfd.m_chars[index];
 
-			let.dimension = sf::IntRect(theChar.position, theChar.dimension);
-			let.position = sf::Vector2f((float)(prevAdvance)+prevX + theChar.offset.x, -theChar.offset.y);
+			letter.setTextureRect(sf::IntRect(theChar.position, theChar.dimension));
+			letter.setPosition(sf::Vector2f((float)(prevAdvance)+prevX + theChar.offset.x, -theChar.offset.y));
 			
-			m_letters.push_back(let);
-			prevAdvance = theChar.advance;
-			prevX = let.position.x;
+			m_letters.push_back(letter);
+			prevAdvance = theChar.advance * m_scale;
+			prevX = letter.getPosition().x;
 		}
-	}
 
-	void draw(sf::RenderWindow & target)
-	{
 		for(auto & let : m_letters)
 		{
-			m_sprite.setPosition(m_position + let.position);
-			m_sprite.setTextureRect(let.dimension);
-			target.draw(m_sprite);
+			let.move(m_position);
 		}
 	}
 private:
-	struct Letter
+	virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const
 	{
-		char c;
-		sf::Vector2f position;
-		sf::IntRect dimension;
-	};
-
+		for(auto & let : m_letters)
+		{
+			target.draw(let);
+		}
+	}
+	
 	sf::Vector2f m_position;
-	std::vector<Letter> m_letters;
+	float m_scale = 1.f;
+	std::vector<sf::Sprite> m_letters;
 	std::string m_str;
 	BitmapFontData & m_bmfd;
-	sf::Sprite m_sprite;
 };
 
 void initPkmnNameText(sf::Text & text)
@@ -204,7 +218,9 @@ int main()
 	textureBackground.loadFromFile(Resources + TextureBackground);
 	titleFont.loadFromFile(Resources + FontTitle);
 	p1Frame.setTexture(texturePlayerBox, true);
+	p1Frame.setScale(1.5f, 1.5f);
 	p2Frame.setTexture(textureEnemyBox, true);
+	p2Frame.setScale(1.5f, 1.5f);
 	background.setTexture(textureBackground);
 
 	p1Name.setFont(titleFont);
@@ -218,16 +234,19 @@ int main()
 	
 	BitmapFontData bmfd(Resources + FontTitle, Resources + "fonts/pkmndp.xml");
 	BitmapText text(bmfd);
-
+	
+	text.setScale(2.f);
 	text.setString("AMPHAROS");
 	text.setPosition(sf::Vector2f(10, 300));
-	
 
-	sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "", sf::Style::None);
+	uint32_t style = sf::Style::Default;
+
+	sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "", style);
 
 	window.setFramerateLimit(60);
 
-	p1Frame.setPosition(500, 500);
+	p1Frame.setPosition(544, 500);
+	p2Frame.setPosition(0, 40);
 
 	sf::View fontView = window.getView();
 	fontView.setSize(static_cast<sf::Vector2f>(textureBackground.getSize()));
@@ -261,7 +280,7 @@ int main()
 		window.draw(p1Frame);
 		window.draw(p2Frame);
 
-		text.draw(window);
+		window.draw(text);
 		//window.draw(p1Name);
 		//window.draw(p2Name);
 		window.display();
