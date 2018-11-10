@@ -4,12 +4,15 @@
 
 #include "bitmapfont.hpp"
 
+
+//Class used for drawing text in a bitmap fashion
 class BitmapText : public sf::Drawable
 {
 public:
 	BitmapText(BitmapFont & bmf);
 
-	void setPosition(sf::Vector2f pos);
+	//Note: The origin of the text is its bottom-left corner
+	void setPosition(sf::Vector2f pos);	
 	void setScale(float scale);
 	void setColor(sf::Color color);
 	void setString(const std::string & str);

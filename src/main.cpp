@@ -7,9 +7,9 @@
 #include <vector>
 #include <algorithm>
 
-const sf::VideoMode DefaultMode(1024, 768);
+const static sf::VideoMode DefaultMode(1024, 768);
 
-bool fullscreen = 0;
+static bool fullscreen = 0;
 
 int main()
 {
@@ -33,7 +33,7 @@ int main()
 
 	p1Name.setScale(1.6f);
 	p1Name.setString("ALTARIA");
-	p1Name.setPosition(sf::Vector2f(594.f, 532.f));
+	p1Name.setPosition(sf::Vector2f(690.f, 532.f));
 	
 	p2Name.setScale(1.6f);
 	p2Name.setString("AMPHAROS");
@@ -50,7 +50,7 @@ int main()
 	sf::RenderWindow window(DefaultMode, "");
 	window.setFramerateLimit(60u);
 
-	p1Frame.setPosition(544.f, 500.f);
+	p1Frame.setPosition(640.f, 500.f);
 	p2Frame.setPosition(0.f, 40.f);
 
 	sf::View fontView = window.getView();
