@@ -131,14 +131,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\external\tinyxml\tinyxml2.cpp" />
+    <ClCompile Include="..\src\bitmapfont.cpp" />
+    <ClCompile Include="..\src\bitmaptext.cpp" />
     <ClCompile Include="..\src\engine.cpp" />
     <ClCompile Include="..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\battlefont.hpp" />
+    <ClInclude Include="..\src\bitmapfont.hpp" />
+    <ClInclude Include="..\src\bitmaptext.hpp" />
     <ClInclude Include="..\src\engine.hpp" />
     <ClInclude Include="..\src\gamestate.hpp" />
     <ClInclude Include="..\src\ui.hpp" />
+    <ClInclude Include="..\src\utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
