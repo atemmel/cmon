@@ -11,16 +11,18 @@ const std::string Resources					= "resources/";
 const std::string TextureBattleUiPlayerBox	= "sprites/battleui/playerBox.png";
 const std::string TextureBattleUiEnemyBox	= "sprites/battleui/enemyBox.png";
 const std::string TextureBackground			= "sprites/battlebacks/battlebgField.png";
-//const std::string FontTitle					= "fonts/pkmnemn.ttf";
 const std::string FontTitle					= "fonts/pkmndp.png";
 
+const sf::VideoMode DefaultMode(1024, 768);
+
+bool fullscreen = 0;
 
 int main()
 {
-	
-	
 	sf::Texture texturePlayerBox, textureEnemyBox, textureBackground;
 	sf::Sprite p1Frame, p2Frame, background;
+	BitmapFont bmf(Resources + FontTitle, Resources + "fonts/pkmndp.xml");
+	BitmapText p1Name(bmf), p2Name(bmf);
 
 	texturePlayerBox.loadFromFile(Resources + TextureBattleUiPlayerBox);
 	textureEnemyBox.loadFromFile(Resources + TextureBattleUiEnemyBox);
@@ -31,17 +33,15 @@ int main()
 	p2Frame.setScale(1.5f, 1.5f);
 	background.setTexture(textureBackground);
 
-	BitmapFont bmf(Resources + FontTitle, Resources + "fonts/pkmndp.xml");
-	BitmapText text(bmf);
+	p1Name.setScale(1.5f);
+	p1Name.setString("ALTARIA");
+	p1Name.setPosition(sf::Vector2f(594, 520));
 	
-	text.setScale(1.5f);
-	text.setString("AMPHAROS");
-	text.setPosition(sf::Vector2f(10, 300));
+	p2Name.setScale(1.5f);
+	p2Name.setString("AMPHAROS");
+	p2Name.setPosition(sf::Vector2f(60, 60));
 
-	uint32_t style = sf::Style::Default;
-
-	sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "", style);
-
+	sf::RenderWindow window(DefaultMode, "");
 	window.setFramerateLimit(60);
 
 	p1Frame.setPosition(544, 500);
@@ -62,6 +62,30 @@ int main()
 				&& event.key.code == sf::Keyboard::Key::F8)
 				window.close();
 
+			else if(event.type == sf::Event::KeyPressed
+				&& event.key.code == sf::Keyboard::Enter
+				&& event.key.alt)
+			{
+				uint32_t style = 0;
+				sf::VideoMode mode;
+
+				if(fullscreen)
+				{
+					style = sf::Style::Default;
+					mode = DefaultMode;
+				}
+				else
+				{
+					style = sf::Style::None;
+					mode = sf::VideoMode::getDesktopMode();
+				}
+
+				window.close();
+				window.create(mode, "", style);
+				window.setFramerateLimit(60);
+				fullscreen ^= 1;	//Toggle
+			}
+
 			/* 
 			//	This should not happen
 			else if(event.type == sf::Event::Resized)
@@ -79,7 +103,8 @@ int main()
 		window.draw(p1Frame);
 		window.draw(p2Frame);
 
-		window.draw(text);
+		window.draw(p1Name);
+		window.draw(p2Name);
 		window.display();
 	}
 	return 0;
