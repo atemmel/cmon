@@ -15,6 +15,12 @@ public:
 	void setString(const std::string & str);
 
 private:
+	struct Letter
+	{
+		sf::Sprite sprite;
+		bool active = 1;
+	};
+
 	virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 
 	sf::Vector2f m_position;
@@ -24,6 +30,5 @@ private:
 	std::string m_str;
 	BitmapFont & m_bmf;
 };
-
 
 #endif

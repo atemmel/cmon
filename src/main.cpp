@@ -11,6 +11,7 @@ const std::string Resources					= "resources/";
 const std::string TextureBattleUiPlayerBox	= "sprites/battleui/playerBox.png";
 const std::string TextureBattleUiEnemyBox	= "sprites/battleui/enemyBox.png";
 const std::string TextureBackground			= "sprites/battlebacks/battlebgField.png";
+const std::string TextureMessageBox			= "sprites/battleui/messagebox.png";
 const std::string FontTitle					= "fonts/pkmndp.png";
 
 const sf::VideoMode DefaultMode(1024, 768);
@@ -19,27 +20,39 @@ bool fullscreen = 0;
 
 int main()
 {
-	sf::Texture texturePlayerBox, textureEnemyBox, textureBackground;
-	sf::Sprite p1Frame, p2Frame, background;
+	sf::Texture texturePlayerBox, textureEnemyBox, textureBackground, textureMessageBox;
+	sf::Sprite p1Frame, p2Frame, background, messageBox;
 	BitmapFont bmf(Resources + FontTitle, Resources + "fonts/pkmndp.xml");
-	BitmapText p1Name(bmf), p2Name(bmf);
+	BitmapText p1Name(bmf), p2Name(bmf), upperText(bmf), lowerText(bmf);
 
 	texturePlayerBox.loadFromFile(Resources + TextureBattleUiPlayerBox);
 	textureEnemyBox.loadFromFile(Resources + TextureBattleUiEnemyBox);
 	textureBackground.loadFromFile(Resources + TextureBackground);
+	textureMessageBox.loadFromFile(Resources + TextureMessageBox);
 	p1Frame.setTexture(texturePlayerBox, true);
-	p1Frame.setScale(1.5f, 1.5f);
+	p1Frame.setScale(1.6f, 1.6f);
 	p2Frame.setTexture(textureEnemyBox, true);
-	p2Frame.setScale(1.5f, 1.5f);
+	p2Frame.setScale(1.6f, 1.6f);
 	background.setTexture(textureBackground);
+	messageBox.setTexture(textureMessageBox);
+	messageBox.setPosition(0, 634);
+	messageBox.setScale(1.6f, 1.6f);
 
-	p1Name.setScale(1.5f);
+	p1Name.setScale(1.6f);
 	p1Name.setString("ALTARIA");
-	p1Name.setPosition(sf::Vector2f(594, 520));
+	p1Name.setPosition(sf::Vector2f(594.f, 532.f));
 	
-	p2Name.setScale(1.5f);
+	p2Name.setScale(1.6f);
 	p2Name.setString("AMPHAROS");
-	p2Name.setPosition(sf::Vector2f(60, 60));
+	p2Name.setPosition(sf::Vector2f(60.f, 72.f));
+
+	upperText.setScale(1.6f);
+	upperText.setString("This is the upper text!");
+	upperText.setPosition(sf::Vector2f(10.f, 688.f));
+
+	lowerText.setScale(1.6f);
+	lowerText.setString("Is this the lower text?");
+	lowerText.setPosition(sf::Vector2f(10.f, 738.f));
 
 	sf::RenderWindow window(DefaultMode, "");
 	window.setFramerateLimit(60);
@@ -83,7 +96,10 @@ int main()
 				window.close();
 				window.create(mode, "", style);
 				window.setFramerateLimit(60);
+		
 				fullscreen ^= 1;	//Toggle
+
+				if(fullscreen) window.setMouseCursorVisible(false);
 			}
 
 			/* 
@@ -97,14 +113,21 @@ int main()
 			*/
 		}
 
+		//circle.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition()));
+
 		window.setView(fontView);
 		window.clear();
 		window.draw(background);
 		window.draw(p1Frame);
 		window.draw(p2Frame);
 
+		window.draw(messageBox);
+		window.draw(upperText);
+		window.draw(lowerText);
+
 		window.draw(p1Name);
 		window.draw(p2Name);
+
 		window.display();
 	}
 	return 0;

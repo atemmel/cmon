@@ -64,7 +64,7 @@ void BitmapText::setString(const std::string & str)
 
 		letter.setTextureRect(sf::IntRect(theChar.position, theChar.dimension));
 		letter.setPosition(sf::Vector2f(static_cast<float>(prevAdvance) + prevX
-			+ static_cast<float>(theChar.offset.x), static_cast<float>(-theChar.offset.y)));
+			+ static_cast<float>(theChar.offset.x), static_cast<float>(-theChar.offset.y) * m_scale));
 
 		m_letters.push_back(letter);
 		prevAdvance = theChar.advance * m_scale;
