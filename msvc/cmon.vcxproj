@@ -143,6 +143,7 @@
     <ClInclude Include="..\src\element.hpp" />
     <ClInclude Include="..\src\engine.hpp" />
     <ClInclude Include="..\src\gamestate.hpp" />
+    <ClInclude Include="..\src\objectpool.hpp" />
     <ClInclude Include="..\src\resources.hpp" />
     <ClInclude Include="..\src\ui.hpp" />
     <ClInclude Include="..\src\utils.hpp" />

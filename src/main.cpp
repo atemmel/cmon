@@ -1,5 +1,7 @@
 #include "bitmaptext.hpp"
 #include "resources.hpp"
+#include "element.hpp"
+#include "objectpool.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <tinyxml2.h>
@@ -38,6 +40,8 @@ int main()
 	p2Name.setScale(1.6f);
 	p2Name.setString("AMPHAROS");
 	p2Name.setPosition(sf::Vector2f(60.f, 72.f));
+
+	ObjectPool<Element, 5> pool;
 
 	upperText.setScale(1.6f);
 	upperText.setString("This is the upper text!");
