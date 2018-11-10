@@ -1,18 +1,11 @@
 #include "bitmaptext.hpp"
+#include "resources.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <tinyxml2.h>
 #include <iostream>
-#include <string>
 #include <vector>
 #include <algorithm>
-
-const std::string Resources					= "resources/";
-const std::string TextureBattleUiPlayerBox	= "sprites/battleui/playerBox.png";
-const std::string TextureBattleUiEnemyBox	= "sprites/battleui/enemyBox.png";
-const std::string TextureBackground			= "sprites/battlebacks/battlebgField.png";
-const std::string TextureMessageBox			= "sprites/battleui/messagebox.png";
-const std::string FontTitle					= "fonts/pkmndp.png";
 
 const sf::VideoMode DefaultMode(1024, 768);
 
@@ -22,20 +15,20 @@ int main()
 {
 	sf::Texture texturePlayerBox, textureEnemyBox, textureBackground, textureMessageBox;
 	sf::Sprite p1Frame, p2Frame, background, messageBox;
-	BitmapFont bmf(Resources + FontTitle, Resources + "fonts/pkmndp.xml");
+	BitmapFont bmf(Resources::Fonts::Message, Resources::Fonts::MessageData);
 	BitmapText p1Name(bmf), p2Name(bmf), upperText(bmf), lowerText(bmf);
 
-	texturePlayerBox.loadFromFile(Resources + TextureBattleUiPlayerBox);
-	textureEnemyBox.loadFromFile(Resources + TextureBattleUiEnemyBox);
-	textureBackground.loadFromFile(Resources + TextureBackground);
-	textureMessageBox.loadFromFile(Resources + TextureMessageBox);
+	texturePlayerBox.loadFromFile(Resources::Textures::BattleUiPlayerBox);
+	textureEnemyBox.loadFromFile(Resources::Textures::BattleUiEnemyBox);
+	textureBackground.loadFromFile(Resources::Textures::Background);
+	textureMessageBox.loadFromFile(Resources::Textures::MessageBox);
 	p1Frame.setTexture(texturePlayerBox, true);
 	p1Frame.setScale(1.6f, 1.6f);
 	p2Frame.setTexture(textureEnemyBox, true);
 	p2Frame.setScale(1.6f, 1.6f);
 	background.setTexture(textureBackground);
 	messageBox.setTexture(textureMessageBox);
-	messageBox.setPosition(0, 634);
+	messageBox.setPosition(0.f, 634.f);
 	messageBox.setScale(1.6f, 1.6f);
 
 	p1Name.setScale(1.6f);
@@ -55,10 +48,10 @@ int main()
 	lowerText.setPosition(sf::Vector2f(10.f, 738.f));
 
 	sf::RenderWindow window(DefaultMode, "");
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(60u);
 
-	p1Frame.setPosition(544, 500);
-	p2Frame.setPosition(0, 40);
+	p1Frame.setPosition(544.f, 500.f);
+	p2Frame.setPosition(0.f, 40.f);
 
 	sf::View fontView = window.getView();
 	fontView.setSize(static_cast<sf::Vector2f>(textureBackground.getSize()));
@@ -101,19 +94,7 @@ int main()
 
 				if(fullscreen) window.setMouseCursorVisible(false);
 			}
-
-			/* 
-			//	This should not happen
-			else if(event.type == sf::Event::Resized)
-			{
-				sf::Vector2f evVec{(float)event.size.width, (float)event.size.height};
-				std::cout << "x: " << evVec.x << '\n' << "y: " << evVec.y << '\n';
-				fontView.setSize(evVec);
-			}
-			*/
 		}
-
-		//circle.setPosition(static_cast<sf::Vector2f>(sf::Mouse::getPosition()));
 
 		window.setView(fontView);
 		window.clear();

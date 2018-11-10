@@ -50,6 +50,9 @@
     <ClInclude Include="..\src\bitmapfont.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\resources.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\resources\fonts\pkmndp.xml">
