@@ -12,9 +12,15 @@ class HealthBar : public sf::Drawable
 {
 public:
 	HealthBar(sf::Vector2f dimension)
-		: m_bar(dimension), m_maxWidth(dimension.x)
+		:  m_maxWidth(dimension.x)
 	{
-		m_bar.setFillColor(High);
+		sf::Vector2f size = {dimension.x, dimension.y / 2.f};
+
+		m_upperBar.setSize(size);
+		m_lowerBar.setSize(size);
+		m_upperBar.setFillColor(Upper::High);
+		m_lowerBar.setFillColor(Lower::High);
+		m_lowerBar.setPosition(0.f, size.y);
 	}
 
 	void setHealth(float health)	//Expects a value from 0 to 1
@@ -23,40 +29,65 @@ public:
 
 		if(health > 0.53f)
 		{
-			m_bar.setFillColor(High);
+			m_upperBar.setFillColor(Upper::High);
+			m_lowerBar.setFillColor(Lower::High);
 		}
 		else if(health > 0.2f)
 		{
-			m_bar.setFillColor(Medium);
+			m_upperBar.setFillColor(Upper::Medium);
+			m_lowerBar.setFillColor(Lower::Medium);
 		}
-		else m_bar.setFillColor(Low);
+		else
+		{
+			m_upperBar.setFillColor(Upper::Low);
+			m_lowerBar.setFillColor(Lower::Low);
+		}
 
-		m_bar.setSize(sf::Vector2f(m_maxWidth * health, m_bar.getSize().y));
+		float scale = m_maxWidth * health;
+
+		m_upperBar.setSize(sf::Vector2f(scale, m_upperBar.getSize().y));
+		m_lowerBar.setSize(sf::Vector2f(scale, m_lowerBar.getSize().y));
 	}
 
 	void setPosition(sf::Vector2f position)
 	{
-		m_bar.setPosition(position);
-	}
-
-	void setScale(float scale)
-	{
-		m_bar.setScale(scale, scale);
+		m_upperBar.setPosition(position);
+		m_lowerBar.setPosition(position + sf::Vector2f(0.f, m_upperBar.getSize().y));
 	}
 
 private:
+	struct Upper
+	{
+		const static sf::Color High;
+		const static sf::Color Medium;
+		const static sf::Color Low;
+	};
+
+	struct Lower
+	{
+		const static sf::Color High;
+		const static sf::Color Medium;
+		const static sf::Color Low;
+	};
+
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
-		target.draw(m_bar);
+		target.draw(m_lowerBar);
+		target.draw(m_upperBar);
 	}
 
-	const static sf::Color High;
-	const static sf::Color Medium;
-	const static sf::Color Low;
-
 	float m_maxWidth;
-	sf::RectangleShape m_bar;
+	sf::RectangleShape m_upperBar;
+	sf::RectangleShape m_lowerBar;
 };
+
+const sf::Color HealthBar::Upper::High		= sf::Color(96, 248, 96);
+const sf::Color HealthBar::Upper::Medium	= sf::Color(248, 168, 0);
+const sf::Color HealthBar::Upper::Low		= sf::Color(248, 64, 112); //Cozy
+
+const sf::Color HealthBar::Lower::High		= sf::Color(24, 192, 32);
+const sf::Color HealthBar::Lower::Medium	= sf::Color(160, 128, 40);
+const sf::Color HealthBar::Lower::Low		= sf::Color(160, 72, 88);
 
 class BattleBox
 {
@@ -65,10 +96,6 @@ public:
 private:
 	BitmapText m_name;
 };
-
-const sf::Color HealthBar::High		= sf::Color::Green;
-const sf::Color HealthBar::Medium	= sf::Color::Yellow;
-const sf::Color HealthBar::Low		= sf::Color::Red;
 
 const static sf::VideoMode DefaultMode(1024, 768);
 
@@ -80,7 +107,7 @@ int main()
 	sf::Sprite p1Frame, p2Frame, background, messageBox;
 	BitmapFont bmf(Resources::Fonts::Message, Resources::Fonts::MessageData);
 	BitmapText p1Name(bmf), p2Name(bmf), upperText(bmf), lowerText(bmf);
-	HealthBar p1Bar(sf::Vector2f(96.f, 4.f));
+	HealthBar p1Bar(sf::Vector2f(154.f, 6.7f)), p2Bar(sf::Vector2f(153.5f, 7.f));
 
 	texturePlayerBox.loadFromFile(Resources::Textures::BattleUiPlayerBox);
 	textureEnemyBox.loadFromFile(Resources::Textures::BattleUiEnemyBox);
@@ -98,12 +125,12 @@ int main()
 	p1Name.setScale(1.6f);
 	p1Name.setString("ALTARIA");
 	p1Name.setPosition(sf::Vector2f(690.f, 532.f));
-	p1Bar.setScale(1.6f);
 	p1Bar.setPosition(sf::Vector2f(819.f, 538.f));
 	
 	p2Name.setScale(1.6f);
 	p2Name.setString("AMPHAROS");
 	p2Name.setPosition(sf::Vector2f(60.f, 72.f));
+	p2Bar.setPosition(sf::Vector2f(141.f, 78.f));
 
 	upperText.setScale(1.6f);
 	upperText.setString("This is the upper text!");
@@ -180,6 +207,7 @@ int main()
 		window.draw(p2Frame);
 
 		window.draw(p1Bar);
+		window.draw(p2Bar);
 
 		window.draw(messageBox);
 		window.draw(upperText);
