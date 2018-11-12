@@ -11,7 +11,6 @@ struct Element
 	sf::Sprite sprite;
 	uint32_t zIndex = 1;
 	bool hidden = 0;
-	bool active = 1;
 };
 
 #endif
