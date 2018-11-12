@@ -135,6 +135,7 @@
     <ClCompile Include="..\src\bitmaptext.cpp" />
     <ClCompile Include="..\src\element.cpp" />
     <ClCompile Include="..\src\engine.cpp" />
+    <ClCompile Include="..\src\healthbar.cpp" />
     <ClCompile Include="..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +144,7 @@
     <ClInclude Include="..\src\element.hpp" />
     <ClInclude Include="..\src\engine.hpp" />
     <ClInclude Include="..\src\gamestate.hpp" />
+    <ClInclude Include="..\src\healthbar.hpp" />
     <ClInclude Include="..\src\objectpool.hpp" />
     <ClInclude Include="..\src\resources.hpp" />
     <ClInclude Include="..\src\ui.hpp" />
