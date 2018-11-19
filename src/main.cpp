@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 const static sf::VideoMode DefaultMode(1024, 768);
 

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef ANIMATEDSPRITE_H
-#define ANIMATEDSPRITE_H
+#ifndef ANIMATEDSPRITE_HPP
+#define ANIMATEDSPRITE_HPP
 
 #include <SFML/Graphics.hpp>
 #include <iostream>

@@ -1,11 +1,12 @@
 #pragma once
-#ifndef HEALTHBAR_H
-#define HEALTHBAR_H
+#ifndef HEALTHBAR_HPP
+#define HEALTHBAR_HPP
 
+#include "element.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Graphics/RenderTarget.hpp"
 
-class HealthBar : public sf::Drawable
+class HealthBar : public Element
 {
 public:
 	HealthBar(sf::Vector2f dimension);
@@ -36,4 +37,4 @@ private:
 	sf::RectangleShape m_lowerBar;
 };
 
-#endif;
+#endif

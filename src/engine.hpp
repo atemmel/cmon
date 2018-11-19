@@ -1,9 +1,10 @@
 #pragma once
 #ifndef ENGINE_HPP
+#define ENGINE_HPP
 
 #include <stack>
 
-#include <SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 class GameState;
 

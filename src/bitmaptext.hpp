@@ -3,10 +3,10 @@
 #define BITMAPTEXT_HPP
 
 #include "bitmapfont.hpp"
-
+#include "element.hpp"
 
 //Class used for drawing text in a bitmap fashion
-class BitmapText : public sf::Drawable
+class BitmapText : public Element
 {
 public:
 	BitmapText(BitmapFont & bmf);
