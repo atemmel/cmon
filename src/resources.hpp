@@ -10,20 +10,22 @@ const std::string Resources = "resources/";
 
 namespace Textures
 {
-	const std::string Textures = "textures/";
+	const std::string Textures = Resources + "textures/";
+	const std::string BattlerFront	= Textures + "battlers/Front/";
+	const std::string BattlerBack	= Textures + "battlers/Back/";
 
-	const std::string BattleUiPlayerBox = Resources + Textures + "battleui/playerBox.png";
-	const std::string BattleUiEnemyBox = Resources + Textures + "battleui/enemyBox.png";
-	const std::string Background = Resources + Textures + "battlebacks/battlebgField.png";
-	const std::string MessageBox = Resources + Textures + "battleui/messagebox.png";
+	const std::string BattleUiPlayerBox = Textures + "battleui/playerBox.png";
+	const std::string BattleUiEnemyBox	= Textures + "battleui/enemyBox.png";
+	const std::string Background = Textures + "battlebacks/battlebgField.png";
+	const std::string MessageBox = Textures + "battleui/messagebox.png";
 };
 
 namespace Fonts
 {
-	const std::string Fonts = "fonts/";
+	const std::string Fonts = Resources + "fonts/";
 
-	const std::string Message = Resources + Fonts + "pkmndp.png";
-	const std::string MessageData = Resources + Fonts + "pkmndp.xml";
+	const std::string Message = Fonts + "pkmndp.png";
+	const std::string MessageData = Fonts + "pkmndp.xml";
 };
 
 namespace Data

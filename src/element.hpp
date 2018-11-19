@@ -1,14 +1,12 @@
 #pragma once
 #ifndef ELEMENT_H
 #define ELEMENT_H
-
-#include "SFML/Graphics/Sprite.hpp"
+#include <cstdint>
 
 struct Element
 {
-	bool operator<(const Element & rhs);
+	bool operator<(const Element & rhs) const;
 
-	sf::Sprite sprite;
 	uint32_t zIndex = 1;
 	bool hidden = 0;
 };

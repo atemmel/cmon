@@ -44,9 +44,6 @@
     <ClInclude Include="..\src\engine.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\ui.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\utils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\healthbar.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\animatedsprite.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

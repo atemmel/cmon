@@ -18,11 +18,11 @@ public:
 	void setString(const std::string & str);
 
 private:
-	struct Letter
+	/*struct Letter
 	{
 		sf::Sprite sprite;
 		bool active = 1;
-	};
+	};*/
 
 	virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 

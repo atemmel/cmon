@@ -2,22 +2,11 @@
 #include "resources.hpp"
 #include "element.hpp"
 #include "healthbar.hpp"
+#include "animatedsprite.hpp"
 
-#include <SFML/Graphics.hpp>
-#include <tinyxml2.h>
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
-
-
-class BattleBox
-{
-public:
-
-private:
-	BitmapText m_name;
-};
 
 const static sf::VideoMode DefaultMode(1024, 768);
 
@@ -25,16 +14,22 @@ static bool fullscreen = 0;
 
 int main()
 {
-	sf::Texture texturePlayerBox, textureEnemyBox, textureBackground, textureMessageBox;
-	sf::Sprite p1Frame, p2Frame, background, messageBox;
-	BitmapFont bmf(Resources::Fonts::Message, Resources::Fonts::MessageData);
-	BitmapText p1Name(bmf), p2Name(bmf), upperText(bmf), lowerText(bmf);
-	HealthBar p1Bar(sf::Vector2f(154.f, 6.7f)), p2Bar(sf::Vector2f(153.5f, 7.f));
+	sf::Texture texturePlayerBox, textureEnemyBox, textureBackground, textureMessageBox, textureP1Sprite, textureP2Sprite;
 
 	texturePlayerBox.loadFromFile(Resources::Textures::BattleUiPlayerBox);
 	textureEnemyBox.loadFromFile(Resources::Textures::BattleUiEnemyBox);
 	textureBackground.loadFromFile(Resources::Textures::Background);
 	textureMessageBox.loadFromFile(Resources::Textures::MessageBox);
+	textureP1Sprite.loadFromFile(Resources::Textures::BattlerBack + "001b.png");
+	textureP2Sprite.loadFromFile(Resources::Textures::BattlerFront + "094.png");
+
+	sf::Sprite p1Frame, p2Frame, background, messageBox;
+	BitmapFont bmf(Resources::Fonts::Message, Resources::Fonts::MessageData);
+	BitmapText p1Name(bmf), p2Name(bmf), upperText(bmf), lowerText(bmf);
+	HealthBar p1Bar(sf::Vector2f(154.f, 6.7f)), p2Bar(sf::Vector2f(153.5f, 7.f));
+	AnimatedSprite p1Sprite(textureP1Sprite), p2Sprite(textureP2Sprite);
+
+
 	p1Frame.setTexture(texturePlayerBox, true);
 	p1Frame.setScale(1.6f, 1.6f);
 	p2Frame.setTexture(textureEnemyBox, true);
@@ -45,12 +40,12 @@ int main()
 	messageBox.setScale(1.6f, 1.6f);
 
 	p1Name.setScale(1.6f);
-	p1Name.setString("ALTARIA");
+	p1Name.setString("BULBASAUR");
 	p1Name.setPosition(sf::Vector2f(690.f, 532.f));
 	p1Bar.setPosition(sf::Vector2f(819.f, 538.f));
 	
 	p2Name.setScale(1.6f);
-	p2Name.setString("AMPHAROS");
+	p2Name.setString("GENGAR");
 	p2Name.setPosition(sf::Vector2f(60.f, 72.f));
 	p2Bar.setPosition(sf::Vector2f(141.f, 78.f));
 
@@ -68,6 +63,12 @@ int main()
 	p1Frame.setPosition(640.f, 500.f);
 	p2Frame.setPosition(0.f, 40.f);
 
+	
+	p1Sprite.setScale(3.f);
+	p1Sprite.setPosition(sf::Vector2f(100.f, 300.f));
+	p2Sprite.setScale(3.f);
+	p2Sprite.setPosition(sf::Vector2f(300.f, 100.f));
+	
 	sf::View fontView = window.getView();
 	fontView.setSize(static_cast<sf::Vector2f>(textureBackground.getSize()));
 	sf::Vector2f center = static_cast<sf::Vector2f>(textureBackground.getSize() / 2u);
@@ -121,10 +122,17 @@ int main()
 				}
 			}
 		}
+		
+		p1Sprite.update();
+		p2Sprite.update();
 
 		window.setView(fontView);
 		window.clear();
 		window.draw(background);
+
+		window.draw(p1Sprite);
+		window.draw(p2Sprite);
+
 		window.draw(p1Frame);
 		window.draw(p2Frame);
 

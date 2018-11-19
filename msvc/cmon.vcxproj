@@ -78,8 +78,8 @@
       <PreprocessorDefinitions>SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)../external/SFML/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>winmm.lib;gdi32.lib;sfml-system-s.lib;opengl32.lib;sfml-window-s.lib;freetype.lib;sfml-graphics-s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)../external/tinyxml;$(SolutionDir)../external/SFML/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>winmm.lib;gdi32.lib;sfml-system-s-d.lib;opengl32.lib;sfml-window-s-d.lib;freetype.lib;sfml-graphics-s-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -91,8 +91,8 @@
       <PreprocessorDefinitions>SFML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)../external/SFML/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>winmm.lib;gdi32.lib;sfml-system-s.lib;opengl32.lib;sfml-window-s.lib;freetype.lib;sfml-graphics-s.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)../external/tinyxml;$(SolutionDir)../external/SFML/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>winmm.lib;gdi32.lib;sfml-system-s-d.lib;opengl32.lib;sfml-window-s-d.lib;freetype.lib;sfml-graphics-s-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,6 +139,7 @@
     <ClCompile Include="..\src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\animatedsprite.hpp" />
     <ClInclude Include="..\src\bitmapfont.hpp" />
     <ClInclude Include="..\src\bitmaptext.hpp" />
     <ClInclude Include="..\src\element.hpp" />
@@ -147,7 +148,6 @@
     <ClInclude Include="..\src\healthbar.hpp" />
     <ClInclude Include="..\src\objectpool.hpp" />
     <ClInclude Include="..\src\resources.hpp" />
-    <ClInclude Include="..\src\ui.hpp" />
     <ClInclude Include="..\src\utils.hpp" />
   </ItemGroup>
   <ItemGroup>
