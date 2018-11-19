@@ -123,8 +123,8 @@ int main()
 			}
 		}
 		
-		p1Sprite.update();
-		p2Sprite.update();
+		p1Sprite.next();
+		p2Sprite.next();
 
 		window.setView(fontView);
 		window.clear();
