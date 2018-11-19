@@ -13,6 +13,13 @@ const static sf::VideoMode DefaultMode(1024, 768);
 
 static bool fullscreen = 0;
 
+class BattlerBox
+{
+public:
+	std::shared_ptr<HealthBar> bar = nullptr;
+	std::shared_ptr<AnimatedSprite> pokemonSprite = nullptr;
+}
+
 int main()
 {
 	sf::Texture texturePlayerBox, textureEnemyBox, textureBackground, textureMessageBox, textureP1Sprite, textureP2Sprite;
