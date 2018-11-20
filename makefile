@@ -5,7 +5,6 @@ CFLAGS := -Wall
 INCLUDES := -Iexternal/tinyxml/
 
 build: $(SRC_FILES)
-	echo $(INCLUDES)
 	g++ $(SRC_FILES) $(INCLUDES) $(LIBS) $(CFLAGS) 
 run: build
 	./a.out
