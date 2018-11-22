@@ -13,6 +13,7 @@ public:
 	Sprite(Texture & texture);
 
 	void setPosition(sf::Vector2f pos);
+	void setPosition(float x, float y);
 	void setScale(float scale);
 
 private:

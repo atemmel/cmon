@@ -10,6 +10,11 @@ void Sprite::setPosition(sf::Vector2f pos)
 	m_sprite.setPosition(pos);
 }
 
+void Sprite::setPosition(float x, float y)
+{
+	m_sprite.setPosition(x, y);
+}
+
 void Sprite::setScale(float scale)
 {
 	m_sprite.setScale(scale, scale);

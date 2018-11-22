@@ -33,23 +33,21 @@ int main()
 
 	auto bmt = manager.access<Texture>(Path::Fonts::Message);
 
-	sf::Sprite p1Frame, p2Frame, background, messageBox;
-	//SpriteElement p1Frame(texturePlayerBox), p2Frame(textureEnemyBox) , background(textureBackground), messageBox(textureMessageBox);
+	Sprite p1Frame(*manager.access<Texture>(Path::Textures::BattleUiPlayerBox)), 
+		p2Frame(*manager.access<Texture>(Path::Textures::BattleUiEnemyBox)) ,
+		background(*manager.access<Texture>(Path::Textures::Background)),
+		messageBox(*manager.access<Texture>(Path::Textures::MessageBox));
+
 	BitmapFontData bmf(Path::Fonts::MessageData);
 	BitmapText p1Name(*bmt, bmf), p2Name(*bmt, bmf), upperText(*bmt, bmf), lowerText(*bmt, bmf);
 	HealthBar p1Bar(sf::Vector2f(154.f, 6.7f)), p2Bar(sf::Vector2f(153.5f, 7.f));
 	AnimatedSprite p1Sprite(*manager.access<Texture>(p1Path)),
 		p2Sprite(*manager.access<Texture>(p2Path));
 
-
-	p1Frame.setTexture(*manager.access<Texture>(Path::Textures::BattleUiPlayerBox), true);
-	p1Frame.setScale(1.6f, 1.6f);
-	p2Frame.setTexture(*manager.access<Texture>(Path::Textures::BattleUiEnemyBox), true);
-	p2Frame.setScale(1.6f, 1.6f);
-	background.setTexture(*manager.access<Texture>(Path::Textures::Background));
-	messageBox.setTexture(*manager.access<Texture>(Path::Textures::MessageBox));
+	p1Frame.setScale(1.6f);
+	p2Frame.setScale(1.6f);
 	messageBox.setPosition(0.f, 634.f);
-	messageBox.setScale(1.6f, 1.6f);
+	messageBox.setScale(1.6f);
 
 	p1Name.setScale(1.6f);
 	p1Name.setString("BULBASAUR");

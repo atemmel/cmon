@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="..\external\tinyxml\tinyxml2.cpp" />
     <ClCompile Include="..\src\animatedsprite.cpp" />
+    <ClCompile Include="..\src\battlerbox.cpp" />
     <ClCompile Include="..\src\bitmapfont.cpp" />
     <ClCompile Include="..\src\bitmaptext.cpp" />
     <ClCompile Include="..\src\element.cpp" />

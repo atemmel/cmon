@@ -4,12 +4,19 @@
 
 #include "healthbar.hpp"
 #include "bitmaptext.hpp"
+#include "resourcemanager.hpp"
 
 #include <memory>
 
 class BattlerBox
 {
 public:
+	enum Character {
+		Player, Enemy
+	};
+
+	BattlerBox(Character character, ResourceManager & manager);
+
 	std::shared_ptr<HealthBar> bar = nullptr;
 	std::shared_ptr<BitmapText> name = nullptr;
 	std::shared_ptr<BitmapText> lv = nullptr;
