@@ -150,6 +150,7 @@
     <ClInclude Include="..\src\objectpool.hpp" />
     <ClInclude Include="..\src\resource.hpp" />
     <ClInclude Include="..\src\path.hpp" />
+    <ClInclude Include="..\src\resourcemanager.hpp" />
     <ClInclude Include="..\src\utils.hpp" />
   </ItemGroup>
   <ItemGroup>

@@ -2,13 +2,14 @@
 #ifndef ANIMATEDSPRITE_HPP
 #define ANIMATEDSPRITE_HPP
 
+#include "resource.hpp"
+
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
 class AnimatedSprite : public sf::Drawable
 {
 public:
-	AnimatedSprite(sf::Texture & texture);
+	AnimatedSprite(Texture & texture);
 
 	void next();
 

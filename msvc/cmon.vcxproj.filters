@@ -74,6 +74,9 @@
     <ClInclude Include="..\src\path.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\resourcemanager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\resources\fonts\pkmndp.xml">

@@ -4,6 +4,7 @@
 #include "healthbar.hpp"
 #include "animatedsprite.hpp"
 #include "resource.hpp"
+#include "resourcemanager.hpp"
 
 #include <iostream>
 #include <vector>
@@ -13,7 +14,6 @@
 const static sf::VideoMode DefaultMode(1024, 768);
 
 static bool fullscreen = 0;
-
 
 class BattlerBox
 {
@@ -28,29 +28,33 @@ public:
 
 int main()
 {
-	Texture texturePlayerBox, textureEnemyBox, textureBackground, textureMessageBox, textureP1Sprite, textureP2Sprite;
+	ResourceManager manager;
 
-	texturePlayerBox.loadFromFile(Path::Textures::BattleUiPlayerBox);
-	textureEnemyBox.loadFromFile(Path::Textures::BattleUiEnemyBox);
-	textureBackground.loadFromFile(Path::Textures::Background);
-	textureMessageBox.loadFromFile(Path::Textures::MessageBox);
-	textureP1Sprite.loadFromFile(Path::Textures::BattlerBack + "001b.png");
-	textureP2Sprite.loadFromFile(Path::Textures::BattlerFront + "094.png");
+	const std::string p1Path = Path::Textures::BattlerBack + "001b.png",
+		p2Path = Path::Textures::BattlerFront + "094.png";
+
+	manager.loadFromFile<Texture>(Path::Textures::BattleUiPlayerBox);
+	manager.loadFromFile<Texture>(Path::Textures::BattleUiEnemyBox);
+	manager.loadFromFile<Texture>(Path::Textures::Background);
+	manager.loadFromFile<Texture>(Path::Textures::MessageBox);
+	manager.loadFromFile<Texture>(p1Path);
+	manager.loadFromFile<Texture>(p2Path);
 
 	sf::Sprite p1Frame, p2Frame, background, messageBox;
 	//SpriteElement p1Frame(texturePlayerBox), p2Frame(textureEnemyBox) , background(textureBackground), messageBox(textureMessageBox);
 	BitmapFont bmf(Path::Fonts::Message, Path::Fonts::MessageData);
 	BitmapText p1Name(bmf), p2Name(bmf), upperText(bmf), lowerText(bmf);
 	HealthBar p1Bar(sf::Vector2f(154.f, 6.7f)), p2Bar(sf::Vector2f(153.5f, 7.f));
-	AnimatedSprite p1Sprite(textureP1Sprite), p2Sprite(textureP2Sprite);
+	AnimatedSprite p1Sprite(*manager.access<Texture>(p1Path)),
+		p2Sprite(*manager.access<Texture>(p2Path));
 
 
-	p1Frame.setTexture(texturePlayerBox, true);
+	p1Frame.setTexture(*manager.access<Texture>(Path::Textures::BattleUiPlayerBox), true);
 	p1Frame.setScale(1.6f, 1.6f);
-	p2Frame.setTexture(textureEnemyBox, true);
+	p2Frame.setTexture(*manager.access<Texture>(Path::Textures::BattleUiEnemyBox), true);
 	p2Frame.setScale(1.6f, 1.6f);
-	background.setTexture(textureBackground);
-	messageBox.setTexture(textureMessageBox);
+	background.setTexture(*manager.access<Texture>(Path::Textures::Background));
+	messageBox.setTexture(*manager.access<Texture>(Path::Textures::MessageBox));
 	messageBox.setPosition(0.f, 634.f);
 	messageBox.setScale(1.6f, 1.6f);
 
@@ -84,10 +88,11 @@ int main()
 	p2Sprite.setScale(3.f);
 	p2Sprite.setPosition(sf::Vector2f(300.f, 100.f));
 	
-	sf::View fontView = window.getView();
-	fontView.setSize(static_cast<sf::Vector2f>(textureBackground.getSize()));
-	sf::Vector2f center = static_cast<sf::Vector2f>(textureBackground.getSize() / 2u);
-	fontView.setCenter(center);
+	sf::View view = window.getView();
+	auto backgroundPtr = manager.access<Texture>(Path::Textures::Background);
+	sf::Vector2f size = static_cast<sf::Vector2f>(backgroundPtr->getSize());
+	view.setSize(size);
+	view.setCenter(size / 2.f);
 
 	float health = 1.f;
 
@@ -141,7 +146,7 @@ int main()
 		p1Sprite.next();
 		p2Sprite.next();
 
-		window.setView(fontView);
+		window.setView(view);
 		window.clear();
 		window.draw(background);
 

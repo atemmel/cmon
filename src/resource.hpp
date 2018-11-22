@@ -8,16 +8,16 @@
 class Resource
 {
 public:
-	virtual void loadFromFile(const std::string & str) = 0;
+	virtual bool loadFromFile(const std::string & str) = 0;
 };
 
 
-class Texture : public sf::Texture, Resource
+class Texture : public Resource, public sf::Texture
 {
 public:
-	virtual void loadFromFile(const std::string & str)
+	virtual bool loadFromFile(const std::string & str)
 	{
-		sf::Texture::loadFromFile(str);
+		return sf::Texture::loadFromFile(str);
 	}
 };
 #endif

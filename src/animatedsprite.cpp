@@ -1,6 +1,6 @@
 #include "animatedsprite.hpp"
 
-AnimatedSprite::AnimatedSprite(sf::Texture & texture)
+AnimatedSprite::AnimatedSprite(Texture & texture)
 {
 	m_sprite.setTexture(texture);
 	auto size = static_cast<sf::Vector2i>(texture.getSize());
