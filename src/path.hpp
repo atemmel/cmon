@@ -1,10 +1,10 @@
 #pragma once
-#ifndef RESOURCES_HPP
-#define RESOURCES_HPP
+#ifndef PATH_HPP
+#define PATH_HPP
 
 #include <string>
 
-namespace Resources
+namespace Path
 {
 const std::string Resources = "resources/";
 

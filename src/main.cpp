@@ -1,8 +1,9 @@
 #include "bitmaptext.hpp"
-#include "resources.hpp"
+#include "path.hpp"
 #include "element.hpp"
 #include "healthbar.hpp"
 #include "animatedsprite.hpp"
+#include "resource.hpp"
 
 #include <iostream>
 #include <vector>
@@ -13,40 +14,42 @@ const static sf::VideoMode DefaultMode(1024, 768);
 
 static bool fullscreen = 0;
 
+
 class BattlerBox
 {
 public:
+	/*
 	std::shared_ptr<HealthBar> bar = nullptr;
-	//std::shared_ptr<AnimatedSprite> pokemonSprite = nullptr;
 	std::shared_ptr<BitmapText> name = nullptr;
 	std::shared_ptr<BitmapText> lv = nullptr;
 	std::shared_ptr<BitmapText> hp = nullptr;
+	*/
 };
 
 int main()
 {
-	sf::Texture texturePlayerBox, textureEnemyBox, textureBackground, textureMessageBox, textureP1Sprite, textureP2Sprite;
+	Texture texturePlayerBox, textureEnemyBox, textureBackground, textureMessageBox, textureP1Sprite, textureP2Sprite;
 
-	texturePlayerBox.loadFromFile(Resources::Textures::BattleUiPlayerBox);
-	textureEnemyBox.loadFromFile(Resources::Textures::BattleUiEnemyBox);
-	textureBackground.loadFromFile(Resources::Textures::Background);
-	textureMessageBox.loadFromFile(Resources::Textures::MessageBox);
-	textureP1Sprite.loadFromFile(Resources::Textures::BattlerBack + "001b.png");
-	textureP2Sprite.loadFromFile(Resources::Textures::BattlerFront + "094.png");
+	texturePlayerBox.loadFromFile(Path::Textures::BattleUiPlayerBox);
+	textureEnemyBox.loadFromFile(Path::Textures::BattleUiEnemyBox);
+	textureBackground.loadFromFile(Path::Textures::Background);
+	textureMessageBox.loadFromFile(Path::Textures::MessageBox);
+	textureP1Sprite.loadFromFile(Path::Textures::BattlerBack + "001b.png");
+	textureP2Sprite.loadFromFile(Path::Textures::BattlerFront + "094.png");
 
 	sf::Sprite p1Frame, p2Frame, background, messageBox;
 	//SpriteElement p1Frame(texturePlayerBox), p2Frame(textureEnemyBox) , background(textureBackground), messageBox(textureMessageBox);
-	BitmapFont bmf(Resources::Fonts::Message, Resources::Fonts::MessageData);
+	BitmapFont bmf(Path::Fonts::Message, Path::Fonts::MessageData);
 	BitmapText p1Name(bmf), p2Name(bmf), upperText(bmf), lowerText(bmf);
 	HealthBar p1Bar(sf::Vector2f(154.f, 6.7f)), p2Bar(sf::Vector2f(153.5f, 7.f));
 	AnimatedSprite p1Sprite(textureP1Sprite), p2Sprite(textureP2Sprite);
 
 
-	//p1Frame.setTexture(texturePlayerBox, true);
+	p1Frame.setTexture(texturePlayerBox, true);
 	p1Frame.setScale(1.6f, 1.6f);
 	p2Frame.setTexture(textureEnemyBox, true);
 	p2Frame.setScale(1.6f, 1.6f);
-	//background.setTexture(textureBackground);
+	background.setTexture(textureBackground);
 	messageBox.setTexture(textureMessageBox);
 	messageBox.setPosition(0.f, 634.f);
 	messageBox.setScale(1.6f, 1.6f);

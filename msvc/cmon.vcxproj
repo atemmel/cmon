@@ -148,7 +148,8 @@
     <ClInclude Include="..\src\gamestate.hpp" />
     <ClInclude Include="..\src\healthbar.hpp" />
     <ClInclude Include="..\src\objectpool.hpp" />
-    <ClInclude Include="..\src\resources.hpp" />
+    <ClInclude Include="..\src\resource.hpp" />
+    <ClInclude Include="..\src\path.hpp" />
     <ClInclude Include="..\src\utils.hpp" />
   </ItemGroup>
   <ItemGroup>
