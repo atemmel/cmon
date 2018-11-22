@@ -7,10 +7,10 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-class BitmapFont
+class BitmapFontData
 {
 public:
-	BitmapFont(const std::string & imageStr, const std::string & metaStr);
+	BitmapFontData(const std::string & metaStr);
 	
 private:
 	friend class BitmapText;
@@ -29,7 +29,6 @@ private:
 	std::vector<CharData> loadCharDataFromFile(const std::string & str);
 
 	std::vector<CharData> m_chars;
-	sf::Texture m_texture;
 };
 
 #endif

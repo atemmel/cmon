@@ -4,12 +4,13 @@
 
 #include "bitmapfont.hpp"
 #include "element.hpp"
+#include "resource.hpp"
 
 //Class used for drawing text in a bitmap fashion
 class BitmapText : public Element
 {
 public:
-	BitmapText(BitmapFont & bmf);
+	BitmapText(Texture & texture, BitmapFontData & bmf);
 
 	//Note: The origin of the text is its bottom-left corner
 	void setPosition(sf::Vector2f pos);	
@@ -18,20 +19,15 @@ public:
 	void setString(const std::string & str);
 
 private:
-	/*struct Letter
-	{
-		sf::Sprite sprite;
-		bool active = 1;
-	};*/
-
 	virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 
+	BitmapFontData & m_bmf;
+	Texture & m_texture;
 	sf::Vector2f m_position;
 	sf::Color m_color = sf::Color::White;
-	float m_scale = 1.f;
 	std::vector<sf::Sprite> m_letters;
 	std::string m_str;
-	BitmapFont & m_bmf;
+	float m_scale = 1.f;
 };
 
 #endif

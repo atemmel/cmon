@@ -1,6 +1,6 @@
 #include "element.hpp"
 
-constexpr bool Element::operator<(const Element & rhs) const
+constexpr bool operator<(const Element & lhs, const Element & rhs)
 {
-	return zIndex < rhs.zIndex;
+	return lhs.zIndex < rhs.zIndex;
 }

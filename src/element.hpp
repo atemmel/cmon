@@ -10,11 +10,11 @@
 struct Element : public sf::Drawable
 {
 	virtual ~Element() {};
-	constexpr bool operator<(const Element & rhs) const;
-
 	uint32_t zIndex = 1;
 	bool hidden = 0;
 };
+
+constexpr bool operator<(const Element & lhs, const Element & rhs);
 
 #endif
 

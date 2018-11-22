@@ -15,17 +15,6 @@ const static sf::VideoMode DefaultMode(1024, 768);
 
 static bool fullscreen = 0;
 
-class BattlerBox
-{
-public:
-	/*
-	std::shared_ptr<HealthBar> bar = nullptr;
-	std::shared_ptr<BitmapText> name = nullptr;
-	std::shared_ptr<BitmapText> lv = nullptr;
-	std::shared_ptr<BitmapText> hp = nullptr;
-	*/
-};
-
 int main()
 {
 	ResourceManager manager;
@@ -39,11 +28,14 @@ int main()
 	manager.loadFromFile<Texture>(Path::Textures::MessageBox);
 	manager.loadFromFile<Texture>(p1Path);
 	manager.loadFromFile<Texture>(p2Path);
+	manager.loadFromFile<Texture>(Path::Fonts::Message);
+
+	auto bmt = manager.access<Texture>(Path::Fonts::Message);
 
 	sf::Sprite p1Frame, p2Frame, background, messageBox;
 	//SpriteElement p1Frame(texturePlayerBox), p2Frame(textureEnemyBox) , background(textureBackground), messageBox(textureMessageBox);
-	BitmapFont bmf(Path::Fonts::Message, Path::Fonts::MessageData);
-	BitmapText p1Name(bmf), p2Name(bmf), upperText(bmf), lowerText(bmf);
+	BitmapFontData bmf(Path::Fonts::MessageData);
+	BitmapText p1Name(*bmt, bmf), p2Name(*bmt, bmf), upperText(*bmt, bmf), lowerText(*bmt, bmf);
 	HealthBar p1Bar(sf::Vector2f(154.f, 6.7f)), p2Bar(sf::Vector2f(153.5f, 7.f));
 	AnimatedSprite p1Sprite(*manager.access<Texture>(p1Path)),
 		p2Sprite(*manager.access<Texture>(p2Path));

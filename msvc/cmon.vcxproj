@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\animatedsprite.hpp" />
+    <ClInclude Include="..\src\battlerbox.hpp" />
     <ClInclude Include="..\src\bitmapfont.hpp" />
     <ClInclude Include="..\src\bitmaptext.hpp" />
     <ClInclude Include="..\src\element.hpp" />

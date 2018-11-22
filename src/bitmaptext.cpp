@@ -1,7 +1,7 @@
 #include "bitmaptext.hpp"
 
-BitmapText::BitmapText(BitmapFont & bmf)
-	: m_bmf(bmf)
+BitmapText::BitmapText(Texture & texture, BitmapFontData & bmf)
+	: m_bmf(bmf), m_texture(texture)
 {
 }
 
@@ -48,7 +48,7 @@ void BitmapText::setString(const std::string & str)
 	for(auto c : m_str)
 	{
 		sf::Sprite letter;
-		letter.setTexture(m_bmf.m_texture);
+		letter.setTexture(m_texture);
 		letter.setScale(m_scale, m_scale);
 		letter.setColor(m_color);
 
