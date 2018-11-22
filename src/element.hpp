@@ -9,7 +9,7 @@
 
 struct Element : public sf::Drawable
 {
-	virtual ~Element() {};
+	virtual ~Element() = default;
 	uint32_t zIndex = 1;
 	bool hidden = 0;
 };

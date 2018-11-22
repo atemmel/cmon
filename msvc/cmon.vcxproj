@@ -138,6 +138,7 @@
     <ClCompile Include="..\src\engine.cpp" />
     <ClCompile Include="..\src\healthbar.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\animatedsprite.hpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="..\src\resource.hpp" />
     <ClInclude Include="..\src\path.hpp" />
     <ClInclude Include="..\src\resourcemanager.hpp" />
+    <ClInclude Include="..\src\sprite.hpp" />
     <ClInclude Include="..\src\utils.hpp" />
   </ItemGroup>
   <ItemGroup>

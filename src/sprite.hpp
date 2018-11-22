@@ -1,15 +1,16 @@
 #pragma once
-#ifndef SPRITEELEMENT_HPP
-#define SPRITEELEMENT_HPP
+#ifndef SPRITE_HPP
+#define SPRITE_HPP
 
 #include "element.hpp"
+#include "resource.hpp"
 
 #include <SFML/Graphics/Sprite.hpp>
 
-class SpriteElement : public Element
+class Sprite : public Element
 {
 public:
-	SpriteElement(sf::Texture & texture);
+	Sprite(Texture & texture);
 
 	void setPosition(sf::Vector2f pos);
 	void setScale(float scale);

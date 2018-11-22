@@ -5,6 +5,7 @@
 #include "animatedsprite.hpp"
 #include "resource.hpp"
 #include "resourcemanager.hpp"
+#include "sprite.hpp"
 
 #include <iostream>
 #include <vector>
