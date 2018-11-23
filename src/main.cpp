@@ -30,18 +30,24 @@ int main()
 	manager.loadFromFile<Texture>(p1Path);
 	manager.loadFromFile<Texture>(p2Path);
 	manager.loadFromFile<Texture>(Path::Fonts::Message);
+	manager.loadFromFile<BitmapFont>(Path::Fonts::MessageData);
 
 	auto bmt = manager.access<Texture>(Path::Fonts::Message);
+	auto bmf = manager.access<BitmapFont>(Path::Fonts::MessageData);
 
-	std::shared_ptr<Sprite> p1Frame = std::make_shared<Sprite>(Sprite(*manager.access<Texture>(Path::Textures::BattleUiPlayerBox)));
-	std::shared_ptr<Sprite> p2Frame = std::make_shared<Sprite>(Sprite(*manager.access<Texture>(Path::Textures::BattleUiEnemyBox)));
-	std::shared_ptr<Sprite> background = std::make_shared<Sprite>(Sprite(*manager.access<Texture>(Path::Textures::Background)));
-	std::shared_ptr<Sprite> messageBox = std::make_shared<Sprite>(Sprite(*manager.access<Texture>(Path::Textures::MessageBox)));
+	std::shared_ptr<Sprite> p1Frame = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::BattleUiPlayerBox));
+	std::shared_ptr<Sprite> p2Frame = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::BattleUiEnemyBox));
+	std::shared_ptr<Sprite> background = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::Background));
+	std::shared_ptr<Sprite> messageBox = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::MessageBox));
 
-	BitmapFontData bmf;
-	bmf.loadFromFile(Path::Fonts::MessageData);
-	BitmapText p1Name(*bmt, bmf), p2Name(*bmt, bmf), upperText(*bmt, bmf), lowerText(*bmt, bmf);
-	HealthBar p1Bar(sf::Vector2f(154.f, 6.7f)), p2Bar(sf::Vector2f(153.5f, 7.f));
+	std::shared_ptr<BitmapText> p1Name = std::make_shared<BitmapText>(*bmt, *bmf);
+	std::shared_ptr<BitmapText> p2Name = std::make_shared<BitmapText>(*bmt, *bmf);
+	std::shared_ptr<BitmapText> upperText = std::make_shared<BitmapText>(*bmt, *bmf);
+	std::shared_ptr<BitmapText> lowerText = std::make_shared<BitmapText>(*bmt, *bmf);
+
+	//BitmapText p1Name(*bmt, *bmf), p2Name(*bmt, *bmf), upperText(*bmt, *bmf), lowerText(*bmt, *bmf);
+	std::shared_ptr<HealthBar> p1Bar = std::make_shared<HealthBar>(sf::Vector2f(154.f, 6.7f));
+	std::shared_ptr<HealthBar> p2Bar = std::make_shared<HealthBar>(sf::Vector2f(153.5f, 7.f));
 	AnimatedSprite p1Sprite(*manager.access<Texture>(p1Path)),
 		p2Sprite(*manager.access<Texture>(p2Path));
 
@@ -50,23 +56,23 @@ int main()
 	messageBox->setPosition(0.f, 634.f);
 	messageBox->setScale(1.6f);
 
-	p1Name.setScale(1.6f);
-	p1Name.setString("BULBASAUR");
-	p1Name.setPosition(sf::Vector2f(690.f, 532.f));
-	p1Bar.setPosition(sf::Vector2f(819.f, 538.f));
+	p1Name->setScale(1.6f);
+	p1Name->setString("BULBASAUR");
+	p1Name->setPosition(sf::Vector2f(690.f, 532.f));
+	p1Bar->setPosition(sf::Vector2f(819.f, 538.f));
 	
-	p2Name.setScale(1.6f);
-	p2Name.setString("GENGAR");
-	p2Name.setPosition(sf::Vector2f(60.f, 72.f));
-	p2Bar.setPosition(sf::Vector2f(141.f, 78.f));
+	p2Name->setScale(1.6f);
+	p2Name->setString("GENGAR");
+	p2Name->setPosition(sf::Vector2f(60.f, 72.f));
+	p2Bar->setPosition(sf::Vector2f(141.f, 78.f));
 
-	upperText.setScale(1.6f);
-	upperText.setString("This is the upper text!");
-	upperText.setPosition(sf::Vector2f(10.f, 688.f));
+	upperText->setScale(1.6f);
+	upperText->setString("This is the upper text!");
+	upperText->setPosition(sf::Vector2f(10.f, 688.f));
 
-	lowerText.setScale(1.6f);
-	lowerText.setString("Is this the lower text?");
-	lowerText.setPosition(sf::Vector2f(10.f, 738.f));
+	lowerText->setScale(1.6f);
+	lowerText->setString("Is this the lower text?");
+	lowerText->setPosition(sf::Vector2f(10.f, 738.f));
 	
 	p1Sprite.setScale(3.f);
 	p1Sprite.setPosition(sf::Vector2f(100.f, 300.f));
@@ -131,7 +137,7 @@ int main()
 				if(event.key.code == sf::Keyboard::Key::H)
 				{
 					health -= 0.01f;
-					p1Bar.setHealth(health);
+					p1Bar->setHealth(health);
 				}
 			}
 		}
@@ -149,15 +155,15 @@ int main()
 		window.draw(*p1Frame);
 		window.draw(*p2Frame);
 
-		window.draw(p1Bar);
-		window.draw(p2Bar);
+		window.draw(*p1Bar);
+		window.draw(*p2Bar);
 
 		window.draw(*messageBox);
-		window.draw(upperText);
-		window.draw(lowerText);
+		window.draw(*upperText);
+		window.draw(*lowerText);
 
-		window.draw(p1Name);
-		window.draw(p2Name);
+		window.draw(*p1Name);
+		window.draw(*p2Name);
 
 		window.display();
 	}

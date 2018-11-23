@@ -1,12 +1,12 @@
 #include "bitmapfont.hpp"
 
-bool BitmapFontData::loadFromFile(const std::string & str)
+bool BitmapFont::loadFromFile(const std::string & str)
 {
 	m_chars = loadCharDataFromFile(str);
 	return !m_chars.empty();
 }
 
-bool BitmapFontData::parseChar(tinyxml2::XMLElement* element, BitmapFontData::CharData & data)
+bool BitmapFont::parseChar(tinyxml2::XMLElement* element, BitmapFont::CharData & data)
 {
 	auto pOffsetX = element->FindAttribute("offset_x"),
 		pOffsetY = element->FindAttribute("offset_y"),
@@ -44,9 +44,9 @@ bool BitmapFontData::parseChar(tinyxml2::XMLElement* element, BitmapFontData::Ch
 	return 1;
 }
 
-std::vector<BitmapFontData::CharData> BitmapFontData::loadCharDataFromFile(const std::string & str)
+std::vector<BitmapFont::CharData> BitmapFont::loadCharDataFromFile(const std::string & str)
 {
-	std::vector<BitmapFontData::CharData> characters;
+	std::vector<BitmapFont::CharData> characters;
 	tinyxml2::XMLDocument doc;
 	CharData data;
 

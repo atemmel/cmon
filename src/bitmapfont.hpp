@@ -8,7 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-class BitmapFontData : public Resource
+class BitmapFont : public Resource
 {
 public:
 	bool loadFromFile(const std::string & str);

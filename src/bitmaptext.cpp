@@ -1,6 +1,6 @@
 #include "bitmaptext.hpp"
 
-BitmapText::BitmapText(Texture & texture, BitmapFontData & bmf)
+BitmapText::BitmapText(Texture & texture, BitmapFont & bmf)
 	: m_bmf(bmf), m_texture(texture)
 {
 }

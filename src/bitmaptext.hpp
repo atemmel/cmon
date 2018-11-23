@@ -10,7 +10,7 @@
 class BitmapText : public Element
 {
 public:
-	BitmapText(Texture & texture, BitmapFontData & bmf);
+	BitmapText(Texture & texture, BitmapFont & bmf);
 
 	//Note: The origin of the text is its bottom-left corner
 	void setPosition(sf::Vector2f pos);	
@@ -21,7 +21,7 @@ public:
 private:
 	virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const;
 
-	BitmapFontData & m_bmf;
+	BitmapFont & m_bmf;
 	Texture & m_texture;
 	sf::Vector2f m_position;
 	sf::Color m_color = sf::Color::White;
