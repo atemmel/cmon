@@ -11,6 +11,7 @@ class Sprite : public Element
 {
 public:
 	Sprite() = default;
+	virtual ~Sprite() = default;
 	Sprite(Texture & texture);
 
 	void setTexture(Texture & texture);
@@ -18,7 +19,7 @@ public:
 	void setPosition(float x, float y);
 	void setScale(float scale);
 
-private:
+protected:
 	virtual void draw(sf::RenderTarget & target, sf::RenderStates state) const;
 
 	sf::Sprite m_sprite;

@@ -45,11 +45,10 @@ int main()
 	std::shared_ptr<BitmapText> upperText = std::make_shared<BitmapText>(*bmt, *bmf);
 	std::shared_ptr<BitmapText> lowerText = std::make_shared<BitmapText>(*bmt, *bmf);
 
-	//BitmapText p1Name(*bmt, *bmf), p2Name(*bmt, *bmf), upperText(*bmt, *bmf), lowerText(*bmt, *bmf);
 	std::shared_ptr<HealthBar> p1Bar = std::make_shared<HealthBar>(sf::Vector2f(154.f, 6.7f));
 	std::shared_ptr<HealthBar> p2Bar = std::make_shared<HealthBar>(sf::Vector2f(153.5f, 7.f));
-	AnimatedSprite p1Sprite(*manager.access<Texture>(p1Path)),
-		p2Sprite(*manager.access<Texture>(p2Path));
+	std::shared_ptr<AnimatedSprite> p1Sprite = std::make_shared<AnimatedSprite>(*manager.access<Texture>(p1Path));
+	std::shared_ptr<AnimatedSprite> p2Sprite = std::make_shared<AnimatedSprite>(*manager.access<Texture>(p2Path));
 
 	p1Frame->setScale(1.6f);
 	p2Frame->setScale(1.6f);
@@ -74,10 +73,10 @@ int main()
 	lowerText->setString("Is this the lower text?");
 	lowerText->setPosition(sf::Vector2f(10.f, 738.f));
 	
-	p1Sprite.setScale(3.f);
-	p1Sprite.setPosition(sf::Vector2f(100.f, 300.f));
-	p2Sprite.setScale(3.f);
-	p2Sprite.setPosition(sf::Vector2f(300.f, 100.f));
+	p1Sprite->setScale(3.f);
+	p1Sprite->setPosition(sf::Vector2f(100.f, 300.f));
+	p2Sprite->setScale(3.f);
+	p2Sprite->setPosition(sf::Vector2f(300.f, 100.f));
 	
 
 	p1Frame->setPosition(640.f, 500.f);
@@ -142,15 +141,15 @@ int main()
 			}
 		}
 		
-		p1Sprite.next();
-		p2Sprite.next();
+		p1Sprite->next();
+		p2Sprite->next();
 
 		window.setView(view);
 		window.clear();
 		window.draw(*background);
 
-		window.draw(p1Sprite);
-		window.draw(p2Sprite);
+		window.draw(*p1Sprite);
+		window.draw(*p2Sprite);
 
 		window.draw(*p1Frame);
 		window.draw(*p2Frame);

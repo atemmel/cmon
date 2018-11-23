@@ -29,18 +29,3 @@ void AnimatedSprite::next()
 	m_sprite.setTextureRect(rect);
 	++m_currentFrame;
 }
-
-void AnimatedSprite::draw(sf::RenderTarget & target, sf::RenderStates states) const
-{
-	target.draw(m_sprite);
-}
-
-void AnimatedSprite::setPosition(sf::Vector2f pos)
-{
-	m_sprite.setPosition(pos);
-}
-
-void AnimatedSprite::setScale(float scale)
-{
-	m_sprite.setScale(scale, scale);
-}
