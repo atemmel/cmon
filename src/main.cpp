@@ -33,21 +33,22 @@ int main()
 
 	auto bmt = manager.access<Texture>(Path::Fonts::Message);
 
-	Sprite p1Frame(*manager.access<Texture>(Path::Textures::BattleUiPlayerBox)), 
-		p2Frame(*manager.access<Texture>(Path::Textures::BattleUiEnemyBox)) ,
-		background(*manager.access<Texture>(Path::Textures::Background)),
-		messageBox(*manager.access<Texture>(Path::Textures::MessageBox));
+	std::shared_ptr<Sprite> p1Frame = std::make_shared<Sprite>(Sprite(*manager.access<Texture>(Path::Textures::BattleUiPlayerBox)));
+	std::shared_ptr<Sprite> p2Frame = std::make_shared<Sprite>(Sprite(*manager.access<Texture>(Path::Textures::BattleUiEnemyBox)));
+	std::shared_ptr<Sprite> background = std::make_shared<Sprite>(Sprite(*manager.access<Texture>(Path::Textures::Background)));
+	std::shared_ptr<Sprite> messageBox = std::make_shared<Sprite>(Sprite(*manager.access<Texture>(Path::Textures::MessageBox)));
 
-	BitmapFontData bmf(Path::Fonts::MessageData);
+	BitmapFontData bmf;
+	bmf.loadFromFile(Path::Fonts::MessageData);
 	BitmapText p1Name(*bmt, bmf), p2Name(*bmt, bmf), upperText(*bmt, bmf), lowerText(*bmt, bmf);
 	HealthBar p1Bar(sf::Vector2f(154.f, 6.7f)), p2Bar(sf::Vector2f(153.5f, 7.f));
 	AnimatedSprite p1Sprite(*manager.access<Texture>(p1Path)),
 		p2Sprite(*manager.access<Texture>(p2Path));
 
-	p1Frame.setScale(1.6f);
-	p2Frame.setScale(1.6f);
-	messageBox.setPosition(0.f, 634.f);
-	messageBox.setScale(1.6f);
+	p1Frame->setScale(1.6f);
+	p2Frame->setScale(1.6f);
+	messageBox->setPosition(0.f, 634.f);
+	messageBox->setScale(1.6f);
 
 	p1Name.setScale(1.6f);
 	p1Name.setString("BULBASAUR");
@@ -66,19 +67,20 @@ int main()
 	lowerText.setScale(1.6f);
 	lowerText.setString("Is this the lower text?");
 	lowerText.setPosition(sf::Vector2f(10.f, 738.f));
-
-	sf::RenderWindow window(DefaultMode, "");
-	window.setFramerateLimit(60u);
-
-	p1Frame.setPosition(640.f, 500.f);
-	p2Frame.setPosition(0.f, 40.f);
-
 	
 	p1Sprite.setScale(3.f);
 	p1Sprite.setPosition(sf::Vector2f(100.f, 300.f));
 	p2Sprite.setScale(3.f);
 	p2Sprite.setPosition(sf::Vector2f(300.f, 100.f));
 	
+
+	p1Frame->setPosition(640.f, 500.f);
+	p2Frame->setPosition(0.f, 40.f);
+
+	sf::RenderWindow window(DefaultMode, "");
+	window.setFramerateLimit(60u);
+
+
 	sf::View view = window.getView();
 	auto backgroundPtr = manager.access<Texture>(Path::Textures::Background);
 	sf::Vector2f size = static_cast<sf::Vector2f>(backgroundPtr->getSize());
@@ -139,18 +141,18 @@ int main()
 
 		window.setView(view);
 		window.clear();
-		window.draw(background);
+		window.draw(*background);
 
 		window.draw(p1Sprite);
 		window.draw(p2Sprite);
 
-		window.draw(p1Frame);
-		window.draw(p2Frame);
+		window.draw(*p1Frame);
+		window.draw(*p2Frame);
 
 		window.draw(p1Bar);
 		window.draw(p2Bar);
 
-		window.draw(messageBox);
+		window.draw(*messageBox);
 		window.draw(upperText);
 		window.draw(lowerText);
 

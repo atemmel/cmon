@@ -2,16 +2,17 @@
 #ifndef BITMAPFONT_HPP
 #define BITMAPFONT_HPP
 
+#include "resource.hpp"
 #include "utils.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-class BitmapFontData
+class BitmapFontData : public Resource
 {
 public:
-	BitmapFontData(const std::string & metaStr);
-	
+	bool loadFromFile(const std::string & str);
+
 private:
 	friend class BitmapText;
 
@@ -22,7 +23,7 @@ private:
 			position;
 
 		int advance = 0;
-		char c = 0;
+		char c = '\0';
 	};
 
 	bool parseChar(tinyxml2::XMLElement* element, CharData & data);

@@ -5,6 +5,11 @@ Sprite::Sprite(Texture & texture)
 	m_sprite.setTexture(texture, true);
 }
 
+void Sprite::setTexture(Texture & texture)
+{
+	m_sprite.setTexture(texture);
+}
+
 void Sprite::setPosition(sf::Vector2f pos)
 {
 	m_sprite.setPosition(pos);

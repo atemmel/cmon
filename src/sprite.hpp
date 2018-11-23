@@ -10,8 +10,10 @@
 class Sprite : public Element
 {
 public:
+	Sprite() = default;
 	Sprite(Texture & texture);
 
+	void setTexture(Texture & texture);
 	void setPosition(sf::Vector2f pos);
 	void setPosition(float x, float y);
 	void setScale(float scale);

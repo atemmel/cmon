@@ -1,8 +1,9 @@
 #include "bitmapfont.hpp"
 
-BitmapFontData::BitmapFontData(const std::string & metaStr)
+bool BitmapFontData::loadFromFile(const std::string & str)
 {
-	m_chars = loadCharDataFromFile(metaStr);
+	m_chars = loadCharDataFromFile(str);
+	return !m_chars.empty();
 }
 
 bool BitmapFontData::parseChar(tinyxml2::XMLElement* element, BitmapFontData::CharData & data)
