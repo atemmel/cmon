@@ -1,17 +1,8 @@
 #include "bitmaptext.hpp"
 #include "path.hpp"
-#include "element.hpp"
 #include "healthbar.hpp"
 #include "animatedsprite.hpp"
-#include "resource.hpp"
 #include "resourcemanager.hpp"
-#include "sprite.hpp"
-
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <memory>
-#include <functional>
 
 struct ElementDerefLess
 {
@@ -115,9 +106,9 @@ int main()
 	sf::RenderWindow window(DefaultMode, "");
 	window.setFramerateLimit(60u);
 
-	sf::View view = window.getView();
 	auto backgroundPtr = manager.access<Texture>(Path::Textures::Background);
 	sf::Vector2f size = static_cast<sf::Vector2f>(backgroundPtr->getSize());
+	sf::View view = window.getView();
 	view.setSize(size);
 	view.setCenter(size / 2.f);
 
