@@ -11,6 +11,16 @@
 #include <vector>
 #include <algorithm>
 #include <memory>
+#include <functional>
+
+struct ElementDerefLess
+{
+	bool operator()(const std::shared_ptr<Element> & lhs,
+		const std::shared_ptr<Element> & rhs) const
+	{
+		return lhs->zIndex < rhs->zIndex;
+	} 
+};
 
 const static sf::VideoMode DefaultMode(1024, 768);
 
@@ -19,6 +29,7 @@ static bool fullscreen = 0;
 int main()
 {
 	ResourceManager manager;
+	std::vector<std::shared_ptr<Element>> elements;
 
 	const std::string p1Path = Path::Textures::BattlerBack + "001b.png",
 		p2Path = Path::Textures::BattlerFront + "094.png";
@@ -50,8 +61,31 @@ int main()
 	std::shared_ptr<AnimatedSprite> p1Sprite = std::make_shared<AnimatedSprite>(*manager.access<Texture>(p1Path));
 	std::shared_ptr<AnimatedSprite> p2Sprite = std::make_shared<AnimatedSprite>(*manager.access<Texture>(p2Path));
 
+	elements.push_back(p1Frame);
+	elements.push_back(p2Frame);
+	elements.push_back(background);
+	elements.push_back(messageBox);
+
+	elements.push_back(p1Name);
+	elements.push_back(p2Name);
+	elements.push_back(upperText);
+	elements.push_back(lowerText);
+
+	elements.push_back(p1Bar);
+	elements.push_back(p2Bar);
+	elements.push_back(p1Sprite);
+	elements.push_back(p2Sprite);
+
+	background->zIndex = 0;
+	p2Sprite->zIndex = p1Sprite->zIndex = 1;
+	p1Frame->zIndex = p2Frame->zIndex = messageBox->zIndex = 2;
+	p1Bar->zIndex = p2Bar->zIndex = 3;
+	p1Name->zIndex = p2Name->zIndex = upperText->zIndex = lowerText->zIndex = 4;
+
 	p1Frame->setScale(1.6f);
 	p2Frame->setScale(1.6f);
+	p1Frame->setPosition(640.f, 500.f);
+	p2Frame->setPosition(0.f, 40.f);
 	messageBox->setPosition(0.f, 634.f);
 	messageBox->setScale(1.6f);
 
@@ -77,14 +111,9 @@ int main()
 	p1Sprite->setPosition(sf::Vector2f(100.f, 300.f));
 	p2Sprite->setScale(3.f);
 	p2Sprite->setPosition(sf::Vector2f(300.f, 100.f));
-	
-
-	p1Frame->setPosition(640.f, 500.f);
-	p2Frame->setPosition(0.f, 40.f);
 
 	sf::RenderWindow window(DefaultMode, "");
 	window.setFramerateLimit(60u);
-
 
 	sf::View view = window.getView();
 	auto backgroundPtr = manager.access<Texture>(Path::Textures::Background);
@@ -93,6 +122,8 @@ int main()
 	view.setCenter(size / 2.f);
 
 	float health = 1.f;
+
+	std::sort(elements.begin(), elements.end(), ElementDerefLess());
 
 	while(window.isOpen())
 	{
@@ -146,23 +177,16 @@ int main()
 
 		window.setView(view);
 		window.clear();
-		window.draw(*background);
 
-		window.draw(*p1Sprite);
-		window.draw(*p2Sprite);
+		if(!std::is_sorted(elements.begin(), elements.end(), ElementDerefLess()))
+		{
+			std::sort(elements.begin(), elements.end(), ElementDerefLess());
+		}
 
-		window.draw(*p1Frame);
-		window.draw(*p2Frame);
-
-		window.draw(*p1Bar);
-		window.draw(*p2Bar);
-
-		window.draw(*messageBox);
-		window.draw(*upperText);
-		window.draw(*lowerText);
-
-		window.draw(*p1Name);
-		window.draw(*p2Name);
+		for(auto & element : elements)
+		{
+			window.draw(*element);
+		}
 
 		window.display();
 	}

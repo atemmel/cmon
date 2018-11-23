@@ -14,7 +14,5 @@ struct Element : public sf::Drawable
 	bool hidden = 0;
 };
 
-constexpr bool operator<(const Element & lhs, const Element & rhs);
-
 #endif
 

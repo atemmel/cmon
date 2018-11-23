@@ -135,7 +135,6 @@
     <ClCompile Include="..\src\battlerbox.cpp" />
     <ClCompile Include="..\src\bitmapfont.cpp" />
     <ClCompile Include="..\src\bitmaptext.cpp" />
-    <ClCompile Include="..\src\element.cpp" />
     <ClCompile Include="..\src\engine.cpp" />
     <ClCompile Include="..\src\healthbar.cpp" />
     <ClCompile Include="..\src\main.cpp" />
