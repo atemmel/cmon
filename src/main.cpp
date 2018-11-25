@@ -37,20 +37,23 @@ int main()
 	auto bmt = manager.access<Texture>(Path::Fonts::Message);
 	auto bmf = manager.access<BitmapFont>(Path::Fonts::MessageData);
 
-	std::shared_ptr<Sprite> p1Frame = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::BattleUiPlayerBox));
-	std::shared_ptr<Sprite> p2Frame = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::BattleUiEnemyBox));
-	std::shared_ptr<Sprite> background = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::Background));
-	std::shared_ptr<Sprite> messageBox = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::MessageBox));
+	auto p1Frame = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::BattleUiPlayerBox));
+	auto p2Frame = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::BattleUiEnemyBox));
+	auto background = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::Background));
+	auto messageBox = std::make_shared<Sprite>(*manager.access<Texture>(Path::Textures::MessageBox));
 
-	std::shared_ptr<BitmapText> p1Name = std::make_shared<BitmapText>(*bmt, *bmf);
-	std::shared_ptr<BitmapText> p2Name = std::make_shared<BitmapText>(*bmt, *bmf);
-	std::shared_ptr<BitmapText> upperText = std::make_shared<BitmapText>(*bmt, *bmf);
-	std::shared_ptr<BitmapText> lowerText = std::make_shared<BitmapText>(*bmt, *bmf);
+	auto p1Name = std::make_shared<BitmapText>(*bmt, *bmf);
+	auto p2Name = std::make_shared<BitmapText>(*bmt, *bmf);
+	auto p1Lv = std::make_shared<BitmapText>(*bmt, *bmf);
+	auto p2Lv = std::make_shared<BitmapText>(*bmt, *bmf);
+	auto p1Hp = std::make_shared<BitmapText>(*bmt, *bmf);
+	auto upperText = std::make_shared<BitmapText>(*bmt, *bmf);
+	auto lowerText = std::make_shared<BitmapText>(*bmt, *bmf);
 
-	std::shared_ptr<HealthBar> p1Bar = std::make_shared<HealthBar>(sf::Vector2f(154.f, 6.7f));
-	std::shared_ptr<HealthBar> p2Bar = std::make_shared<HealthBar>(sf::Vector2f(153.5f, 7.f));
-	std::shared_ptr<AnimatedSprite> p1Sprite = std::make_shared<AnimatedSprite>(*manager.access<Texture>(p1Path));
-	std::shared_ptr<AnimatedSprite> p2Sprite = std::make_shared<AnimatedSprite>(*manager.access<Texture>(p2Path));
+	auto p1Bar = std::make_shared<HealthBar>(sf::Vector2f(154.f, 6.7f));
+	auto p2Bar = std::make_shared<HealthBar>(sf::Vector2f(153.5f, 7.f));
+	auto p1Sprite = std::make_shared<AnimatedSprite>(*manager.access<Texture>(p1Path));
+	auto p2Sprite = std::make_shared<AnimatedSprite>(*manager.access<Texture>(p2Path));
 
 	elements.push_back(p1Frame);
 	elements.push_back(p2Frame);
@@ -59,6 +62,9 @@ int main()
 
 	elements.push_back(p1Name);
 	elements.push_back(p2Name);
+	elements.push_back(p1Lv);
+	elements.push_back(p2Lv);
+	elements.push_back(p1Hp);
 	elements.push_back(upperText);
 	elements.push_back(lowerText);
 
@@ -84,11 +90,20 @@ int main()
 	p1Name->setString("BULBASAUR");
 	p1Name->setPosition(sf::Vector2f(690.f, 532.f));
 	p1Bar->setPosition(sf::Vector2f(819.f, 538.f));
+	p1Lv->setString("40");
+	p1Lv->setScale(1.6f);
+	p1Lv->setPosition(sf::Vector2f(924.f, 521.f));
+	p1Hp->setScale(1.6f);
+	p1Hp->setString("127/127");
+	p1Hp->setPosition(sf::Vector2f(874.f, 571.f));
 	
 	p2Name->setScale(1.6f);
 	p2Name->setString("GENGAR");
 	p2Name->setPosition(sf::Vector2f(60.f, 72.f));
 	p2Bar->setPosition(sf::Vector2f(141.f, 78.f));
+	p2Lv->setString("50");
+	p2Lv->setScale(1.6f);
+	p2Lv->setPosition(sf::Vector2f(296.f, 61.f));
 
 	upperText->setScale(1.6f);
 	upperText->setString("This is the upper text!");

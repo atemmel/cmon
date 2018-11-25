@@ -1,8 +1,9 @@
 #include "bitmaptext.hpp"
 
 BitmapText::BitmapText(Texture & texture, BitmapFont & bmf)
-	: m_bmf(bmf), m_texture(texture)
+	: m_bmf(bmf), m_texture(texture) 
 {
+	zIndex = 5;
 }
 
 void BitmapText::setPosition(sf::Vector2f pos)
