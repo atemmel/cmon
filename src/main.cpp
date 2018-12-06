@@ -131,6 +131,10 @@ int main()
 
 	std::sort(elements.begin(), elements.end(), ElementDerefLess());
 
+	sf::Clock animTimer;
+
+	constexpr float secondsPerAnim = 0.04f;
+
 	while(window.isOpen())
 	{
 		sf::Event event;
@@ -178,8 +182,13 @@ int main()
 			}
 		}
 		
-		p1Sprite->next();
-		p2Sprite->next();
+		if(animTimer.getElapsedTime().asSeconds() >= secondsPerAnim)
+		{
+			p1Sprite->next();
+			p2Sprite->next();
+			
+			animTimer.restart();
+		}
 
 		window.setView(view);
 		window.clear();
